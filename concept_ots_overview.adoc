@@ -1,0 +1,137 @@
+---
+sidebar: sidebar 
+permalink: concept_ots_overview.html 
+keywords: overview, software defined storage, sds, typical deployment, ontap 9 
+summary: ONTAP Select是ONTAP的纯软件版本，可作为虚拟机管理程序主机上的虚拟机部署。它是对主流FAS和AFF ONTAP产品套件以及其他纯软件选项（例如Cloud Volumes ONTAP）的补充。 
+---
+= 了解ONTAP Select
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select是ONTAP的纯软件版本，您可以将其作为虚拟机部署在虚拟机管理程序主机上。它是对主流FAS、 AFF和ASA ONTAP产品套件以及其他纯软件选项（例如Cloud Volumes ONTAP）的补充。
+
+ONTAP Select可将内部磁盘驱动器（NVMe、SSD 或 HDD）以及外部阵列存储转换为灵活的存储系统，并具备专用ONTAP存储系统提供的诸多优势。您还可以在新服务器或现有服务器基础架构上部署ONTAP SelectONTAP Select易于管理，并利用与基于ONTAP 的解决方案相同的管理软件，这意味着运营开销和培训要求的降低。
+
+ONTAP Select通过两种互补的许可模式（容量层和完全灵活的容量池）来适应您的容量消耗需求。这两种许可模式都允许您以低至 1 TB 的增量增加容量。例如，您可以从几 TB 开始，并随着项目的增长动态增加容量。如果您使用容量池，则可以在项目完成后根据需要重新分配容量。
+
+ONTAP Select集成到 VMware vSphere 等云管理框架中。这有助于加速部署文件服务、主目录、软件开发环境和应用程序测试等新项目。
+
+SnapMirror软件支持您在混合云的ONTAP存储之间移动数据，以便您轻松访问所需位置的数据。例如，您可以快速搭建环境来验证某个想法。之后，您可以将项目迁移到专用存储平台进行生产部署，或者将其作为开发工作流程的一部分，在云中更方便地访问。
+
+
+
+== 软件定义存储
+
+通过软件实施和交付 IT 服务，管理员能够以前所未有的速度和敏捷性快速配置资源。随着现代数据中心转向软件定义基础设施 (SDI) 架构，您可以将最有价值的 IT 资产与底层物理基础设施分离，从而提供灵活性、可扩展性和可编程性。
+
+在商品化的世界中，数据分散在直连存储 (DAS) 的各个孤岛中，数据移动和管理已成为更加复杂的问题。软件定义存储 (SDS) 已成为 SDI 领域的重要组成部分，旨在解决这些问题及其他问题。
+
+ONTAP Select是NetApp面向 SDS 市场的解决方案。ONTAPONTAP Select为软件定义数据中心带来了企业级存储管理功能，并将NetApp Data Fabric 架构扩展到物联网 (IoT) 和战术服务器等极端边缘用例。
+
+
+
+== 两个软件组件
+
+ONTAP Select由两个主要软件组件组成：
+
+
+
+=== ONTAP Select节点
+
+ONTAP Select集群由一个、两个、四个、六个或八个节点组成。每个集群节点都部署为单独的虚拟机，并运行专门设计的ONTAP 9 软件版本。
+
+
+
+=== ONTAP Select Deploy 管理实用程序
+
+Deploy 管理实用程序打包并安装为单独的 Linux 虚拟机。您必须使用该实用程序在生产环境中部署ONTAP Select集群。最新版本的ONTAP Select节点映像与 Deploy 实用程序捆绑在一起。
+
+
+NOTE: Deploy 管理实用程序未分配单独的版本号。Deploy的版本号与关联的ONTAP Select版本相同。但是，特定ONTAP Select版本中 Deploy 实用程序的每次更新都有唯一的内部版本号。
+
+
+
+== 典型部署的图示
+
+下图展示了如何使用NetApp ONTAP Select Deploy 管理实用程序来部署和支持四节点ONTAP Select集群。Deploy实用程序和ONTAP Select节点在专用虚拟机管理程序主机上作为单独的虚拟机运行。
+
+image:ots_architecture.png["展示使用 Deploy 管理实用程序创建的ONTAP Select四节点集群。"]
+
+
+
+== 比较ONTAP Select和ONTAP 9
+
+基于硬件的ONTAP和ONTAP Select均提供企业级存储解决方案。然而，由于它们的设计和实施方式不同，因此各自可以满足不同的业务需求和使用场景。在规划ONTAP Select部署之前，您应该熟悉这两个平台之间的主要区别。
+
+
+
+=== 不同的 HA 架构
+
+根据您在集群中定义的节点数， ONTAP Select提供 HA 功能。例如，一个四节点集群由两个 HA 对组成。ONTAP Select使用的 HA 架构基于非共享存储模型。也就是说，HA 对中的一个节点无法直接访问另一个节点拥有的存储。这种设计可能会影响ONTAP Select 的某些运行特性。
+
+
+
+=== 容量许可
+
+ONTAP Select引入了基于消费的许可模式。在生产环境中部署ONTAP Select集群时，您必须为每个节点或共享容量池购买一个包含存储容量的许可证。您必须使用 Deploy 实用程序应用用于确定集群节点存储容量的许可证文件。
+
+
+
+=== ONTAP功能许可
+
+ONTAP Select集群中的每个节点都会自动获得使用多项ONTAP功能的许可。您无需手动安装或应用这些功能许可证。
+
+
+
+=== ONTAP Select不支持的ONTAP功能
+
+ONTAP Select不支持多项ONTAP功能。大多数情况下，这些功能需要虚拟化ONTAP Select环境中不提供的特殊硬件。
+
+* 自主勒索软件防护 (ARP) 的自动更新
++
+
+NOTE: 从ONTAP Select 9.16.1 开始，支持手动更新 ARP，并且 ARP 功能许可证包含在NetApp许可证文件 (NLF) 中。
+
+* 集群 IP 空间
++
+不支持对集群 IP 空间进行任何修改，包括添加或删除端口、虚拟 LAN (VLAN) 或链路聚合组。
+
+* 光纤通道
++
+不支持光纤通道和以太网光纤通道。
+
+* 健康监测器
++
+基于硬件的ONTAP部署中使用的传统运行状况监控特定于底层硬件组件。由于ONTAP Select使用的是虚拟化环境，因此运行状况监控器处于非活动状态。
+
+* 接口组
++
+不支持接口组。
+
+* 多租户密钥管理器（MTKM）
+* NIC 卸载支持
++
+由于ONTAP Select使用的虚拟化环境，因此不支持 NIC 卸载功能。
+
+* NetApp存储加密驱动器
+* ONTAP端口属性
++
+不支持修改ONTAP端口的属性，包括速度、双工和流量控制。
+
+* 服务处理器
+* SVM 迁移
+* SnapLock Compliance
+* SnapMirror主动同步
+* VMware HCX
+
+
+.相关信息
+* link:reference_lic_ontap_features.html#ontap-features-automatically-enabled-by-default["了解默认启用的ONTAP功能"]
+* link:concept_lic_evaluation.html["了解ONTAP Select许可证选项"]
+

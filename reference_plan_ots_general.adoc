@@ -1,0 +1,185 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_ots_general.html 
+keywords: plan, planning, general requirements 
+summary: 在规划ONTAP Select部署时，您应该考虑几个一般要求。 
+---
+= ONTAP Select要求和规划注意事项
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+在规划ONTAP Select部署时，您应该考虑几个一般要求。
+
+
+
+== KVM 所需的 Linux 知识和技能
+
+带有 KVM 虚拟机管理程序的 Linux 是一个复杂的工作环境。在 KVM 上部署ONTAP Select之前，您必须具备必要的知识和技能。
+
+Linux 服务器发行版:: 您应该熟悉用于ONTAP Select部署的特定 Linux 发行版。具体来说，您应该能够执行以下任务：
++
+--
+* 安装 Linux 发行版
+* 使用 CLI 配置系统
+* 添加软件包以及任何依赖项
+
+
+--
+
+
+有关准备 Linux 服务器的更多信息（包括所需的配置和软件包），请参阅主机配置清单。请参阅当前支持的 Linux 发行版的虚拟机管理程序要求。
+
+KVM部署和管理:: 您应该熟悉常规虚拟化概念。此外，在 KVM 环境中安装和管理ONTAP Select时，您必须使用几个 Linux CLI 命令：
++
+--
+* `virt-install`
+* `virsh`
+* `lsblk`
+* `lvs`
+* `vgs`
+* `pvs`
+
+
+--
+网络和 Open vSwitch 配置:: 您应该熟悉网络概念和网络交换机的配置。此外，您还应该具备使用 Open vSwitch 的经验。在 KVM 环境中配置ONTAP Select网络时，必须使用以下网络命令：
++
+--
+* `ovs-vsctl`
+* `ip`
+* `ip link`
+* `systemctl`
+
+
+--
+
+
+
+
+== 集群大小及相关考虑
+
+您应考虑几个与集群大小相关的规划问题。
+
+集群中的节点数:: ONTAP Select集群由一个、两个、四个、六个或八个节点组成。您应该根据应用程序需求确定集群的大小。例如，如果企业部署需要 HA 功能，则应使用多节点集群。
+专用与共置:: 根据应用程序类型，您应该确定部署是遵循专用模型还是共置模型。请注意，由于工作负载的多样性和更紧密的集成，共置模型可能更复杂。
+
+
+
+
+== 虚拟机管理程序主机注意事项
+
+您应考虑几个与虚拟机管理程序主机相关的规划问题。
+
+
+CAUTION: 除非NetApp支持人员指示，否则不应直接修改ONTAP Select虚拟机的配置。只能通过 Deploy 管理实用程序配置和修改虚拟机。未经NetApp支持人员协助，在 Deploy 实用程序之外对ONTAP Select虚拟机进行更改可能会导致虚拟机出现故障并无法使用。
+
+独立于虚拟机管理程序:: ONTAP Select和ONTAP Select Deploy 管理实用程序均独立于虚拟机管理程序。两者都支持以下虚拟机管理程序。
++
+--
+* VMware ESXi
+* 基于内核的虚拟机（KVM）
+
+
+--
+
+
+
+NOTE: 从ONTAP Select 9.14.1 开始，已恢复对 KVM 虚拟机管理程序的支持。此前， ONTAP Select 9.10.1 中已移除在 KVM 虚拟机管理程序上部署新集群的支持，而ONTAP Select 9.11.1 中已移除对管理现有 KVM 集群和主机（脱机或删除除外）的支持。
+
+有关受支持平台的更多详细信息，请参阅特定于虚拟机管理程序的规划信息和发行说明。
+
+ONTAP Select节点和管理实用程序的虚拟机管理程序:: Deploy 管理实用程序和ONTAP Select节点均以虚拟机形式运行。您为 Deploy 实用程序选择的虚拟机管理程序与您为ONTAP Select节点选择的虚拟机管理程序无关。您可以完全灵活地将两者配对：
++
+--
+* 在 VMware ESXi 上运行的部署实用程序可以在 VMware ESXi 或 KVM 上创建和管理ONTAP Select集群
+* 在 KVM 上运行的部署实用程序可以在 VMware ESXi 或 KVM 上创建和管理ONTAP Select集群
+
+
+--
+每个主机有一个或多个ONTAP Select节点实例:: 每个ONTAP Select节点都作为专用虚拟机运行。您可以在同一虚拟机管理程序主机上创建多个节点，但存在以下限制：
++
+--
+* 单个ONTAP Select集群中的多个节点不能在同一主机上运行。特定主机上的所有节点必须来自不同的ONTAP Select集群。
+* 您必须使用外部存储。
+* 如果使用软件 RAID，则只能在主机上部署一个ONTAP Select节点。
+
+
+--
+集群内节点的虚拟机管理程序一致性:: ONTAP Select集群中的所有主机必须运行相同版本的虚拟机管理程序软件。
+每个主机上的物理端口数量:: 您必须将每个主机配置为使用一个、两个或四个物理端口。尽管您可以灵活地配置网络端口，但应尽可能遵循以下建议：
++
+--
+* 单节点集群中的主机应该有两个物理端口。
+* 多节点集群中的每个主机应该有四个物理端口
+
+
+--
+将ONTAP Select与基于ONTAP硬件的集群集成:: 您无法将ONTAP Select节点直接添加到基于ONTAP硬件的集群。但是，您可以选择在ONTAP Select集群和基于硬件的ONTAP集群之间建立集群对等关系。
+
+
+
+
+== 存储注意事项
+
+您应考虑几个与主机存储相关的规划问题。
+
+RAID 类型:: 在 ESXi 上使用直接连接存储 (DAS) 时，您应该决定是使用本地硬件 RAID 控制器还是ONTAP Select附带的软件 RAID 功能。如果您使用软件 RAID，请参阅link:reference_plan_ots_storage.html["存储和 RAID 注意事项"]了解更多信息。
+本地存储:: 使用由 RAID 控制器管理的本地存储时，您必须决定以下内容：
++
+--
+* 是否使用一个或多个 RAID 组
+* 是否使用一个或多个 LUN
+
+
+--
+外部存储:: 使用ONTAP Select vNAS 解决方案时，您必须确定远程数据存储库的位置以及访问方式。ONTAPONTAP Select vNAS 支持以下配置：
++
+--
+* VMware vSAN
+* 通用外部存储阵列
+
+
+--
+估算所需存储空间:: 您应该确定ONTAP Select节点所需的存储容量。获取包含存储容量的许可证时需要此信息。有关更多信息，请参阅存储容量限制。
+
+
+
+NOTE: ONTAP Select存储容量对应于连接到ONTAP Select虚拟机的数据磁盘的总允许大小。
+
+生产部署的许可模型:: 您必须为生产环境中部署的每个ONTAP Select集群选择容量层或容量池许可模式。有关更多信息，请参阅“许可证”部分。
+
+
+
+
+== 使用凭证存储进行身份验证
+
+ONTAP Select Deploy 凭据存储是一个保存帐户信息的数据库。Deploy使用帐户凭据在集群创建和管理过程中执行主机身份验证。您应该了解如何在规划ONTAP Select部署时使用凭据存储。
+
+
+NOTE: 帐户信息使用高级加密标准 (AES) 加密算法和 SHA-256 哈希算法安全地存储在数据库中。
+
+凭证类型:: 支持以下类型的凭证：
++
+--
+* host
++
+*host* 凭证用于在将ONTAP Select节点直接部署到 ESXi 或 KVM 时对虚拟机管理程序主机进行身份验证。
+
+* vcenter
++
+当主机由 VMware vCenter 管理时，*vcenter* 凭据用于在将ONTAP Select节点部署到 ESXi 的过程中对 vCenter 服务器进行身份验证。
+
+
+
+--
+使用权:: 在使用 Deploy 执行常规管理任务（例如添加虚拟机管理程序主机）时，可以从内部访问凭据存储。您也可以直接通过 Deploy Web 用户界面和 CLI 管理凭据存储。
+
+
+.相关信息
+* link:reference_plan_ots_storage.html["存储和 RAID 注意事项"]
+

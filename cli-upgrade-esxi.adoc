@@ -1,0 +1,234 @@
+---
+sidebar: sidebar 
+permalink: cli-upgrade-esxi.html 
+keywords: administer, administering, cli, esxi, upgrade, esxi 7.0 
+summary: 如果您在 VMware ESXi 上运行ONTAP Select ，则可以将 ESXi 软件从早期支持的版本升级到 ESXi 7.0 或更高版本。升级之前，您应该了解升级过程并选择合适的升级步骤。 
+---
+= 将ONTAP Select升级到 VMware ESXi 7.0 或更高版本
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+如果您在 VMware ESXi 上运行ONTAP Select ，则可以将 ESXi 软件从早期支持的版本升级到 ESXi 7.0 或更高版本。升级之前，您应该了解升级过程并选择合适的升级步骤。
+
+
+
+== 准备升级 VMware ESXi
+
+在升级托管ONTAP Select集群的虚拟机管理程序上的 ESXi 软件之前，请准备并选择适合您环境的升级程序。
+
+.步骤
+. *熟悉如何升级 VMware ESXi*
++
+ESXi 软件升级是 VMware 描述和支持的一个过程。使用ONTAP Select时，虚拟机管理程序升级过程是整个升级过程的一部分。有关更多信息，请参阅 VMware 文档。
+
+. *选择升级流程*
++
+有多种升级程序可供选择。您应该根据以下条件选择适用的程序：
+
++
+** ONTAP Select集群大小 支持单节点和多节点集群。
+** 使用ONTAP Select部署
++
+可以使用 Deploy 工具进行升级，也可以不使用 Deploy 工具进行升级。
+
++
+
+TIP: 您应该选择使用部署管理实用程序的升级过程。
+
++
+使用 Deploy 管理实用程序执行 ESXi 升级是更通用且更具弹性的选项。但是，有时可能会出现部署不可用或无法使用的情况。例如，早期版本的ONTAP Select和 Deploy 管理实用程序不支持升级到 ESXi 7.0。
+
++
+如果您正在使用这些早期版本并尝试升级， ONTAP Select虚拟机可能会处于无法启动的状态。在这种情况下，您必须选择不使用 Deploy 的升级过程。请参阅link:https://mysupport.netapp.com/site/bugs-online/product/ONTAPSELECT/BURT/1172198["1172198"^]了解更多信息。
+
+
+
+. *升级部署管理实用程序*
++
+在使用 Deploy 实用程序执行升级过程之前，您可能需要升级您的 Deploy 实例。通常，您应该升级到最新版本的 Deploy。Deploy实用程序必须支持您正在使用的ONTAP Select版本。请参阅link:reference_release_notes.html["ONTAP Select发行说明"]了解更多信息。
+
+. *更新程序完成后*
++
+如果您选择使用 Deploy 实用程序的升级过程，则应在所有节点升级完成后使用 Deploy 执行集群刷新操作。有关更多信息，请参阅刷新 Deploy 集群配置。
+
+
+
+
+
+== 使用 Deploy 升级单节点集群
+
+您可以使用 Deploy 管理实用程序作为升级托管ONTAP Select单节点集群的 VMware ESXi 虚拟机管理程序的一部分。
+
+.步骤
+. 使用管理员帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 将节点移至离线状态：
++
+[source, cli]
+----
+node stop --cluster-name <cluster_name> --node-name <node_name>
+----
+. 使用 VMware 提供的步骤将运行ONTAP Select 的虚拟机管理程序主机升级到 ESXi 7.0 或更高版本。
+. 将节点移至在线状态：
++
+[source, cli]
+----
+node start --cluster-name <cluster_name> --node-name <node_name>
+----
+. 节点启动后，验证集群是否健康。
++
+示例：
+
++
+....
+ESX-1N::> cluster show
+Node           Health  Eligibility
+-------------- ------- ------------
+sdot-d200-011d true    true
+....
+
+
+.完成后
+您应该使用 Deploy 管理实用程序执行集群刷新操作。
+
+
+
+== 使用 Deploy 升级多节点集群
+
+您可以使用 Deploy 管理实用程序作为升级托管ONTAP Select多节点集群的 VMware ESXi 虚拟机管理程序的一部分。
+
+.关于此任务
+您必须对集群中的每个节点执行此升级过程，一次一个节点。如果集群包含四个或更多节点，则应先按顺序升级每个 HA 对中的节点，然后再继续升级下一个 HA 对。
+
+.步骤
+. 使用管理员帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 将节点移至离线状态：
++
+[source, cli]
+----
+node stop --cluster-name <cluster_name> --node-name <node_name>
+----
+. 使用 VMware 提供的步骤将运行ONTAP Select 的虚拟机管理程序主机升级到 ESXi 7.0 或更高版本。
++
+有关详细信息，请参阅准备升级 VMware ESXi。
+
+. 将节点移至在线状态：
++
+[source, cli]
+----
+node start --cluster-name <cluster_name> --node-name <node_name>
+----
+. 节点启动后，验证存储故障转移是否已启用以及集群是否健康。
++
+.显示示例
+[%collapsible]
+====
+[listing]
+----
+ESX-2N_I2_N11N12::> storage failover show
+Takeover
+Node Partner Possible State Description
+-------------- -------------- -------- ---------------------------
+sdot-d200-011d sdot-d200-012d true Connected to sdot-d200-012d
+sdot-d200-012d sdot-d200-011d true Connected to sdot-d200-011d
+2 entries were displayed.
+ESX-2N_I2_N11N12::> cluster show
+Node Health Eligibility
+--------------------- ------- ------------
+sdot-d200-011d true true
+sdot-d200-012d true true
+2 entries were displayed.
+----
+====
+
+
+.完成后
+您必须对ONTAP Select集群中使用的每个主机执行升级过程。所有 ESXi 主机升级完成后，您应该使用 Deploy 管理实用程序执行集群刷新操作。
+
+
+
+== 无需 Deploy 即可升级单节点集群
+
+您可以升级托管ONTAP Select单节点集群的 VMware ESXi 虚拟机管理程序，而无需使用 Deploy 管理实用程序。
+
+.步骤
+. Sign inONTAP命令行界面并停止节点。
+. 使用 VMware vSphere 确认ONTAP Select虚拟机已关闭。
+. 使用 VMware 提供的步骤将运行ONTAP Select 的虚拟机管理程序主机升级到 ESXi 7.0 或更高版本。
++
+有关详细信息，请参阅准备升级 VMware ESXi。
+
+. 使用 VMware vSphere 访问 vCenter 并执行以下操作：
++
+.. 向ONTAP Select虚拟机添加软盘驱动器。
+.. 启动ONTAP Select虚拟机。
+.. 使用管理员帐户通过 SSHSign in到ONTAP CLI。
+
+
+. 节点启动后，验证集群是否健康。
++
+示例：
+
++
+....
+ESX-1N::> cluster show
+Node           Health  Eligibility
+-------------- ------- ------------
+sdot-d200-011d true    true
+....
+
+
+.完成后
+您应该使用 Deploy 管理实用程序执行集群刷新操作。
+
+
+
+== 无需 Deploy 即可升级多节点集群
+
+您可以升级托管ONTAP Select多节点集群的 VMware ESXi 虚拟机管理程序，而无需使用 Deploy 管理实用程序。
+
+.关于此任务
+您必须对集群中的每个节点执行此升级过程，一次一个节点。如果集群包含四个或更多节点，则应先按顺序升级每个 HA 对中的节点，然后再继续升级下一个 HA 对。
+
+.步骤
+. Sign inONTAP命令行界面并停止节点。
+. 使用 VMware vSphere 确认ONTAP Select虚拟机已关闭。
+. 使用 VMware 提供的步骤将运行ONTAP Select 的虚拟机管理程序主机升级到 ESXi 7.0 或更高版本。
+. 使用 VMware vSphere 访问 vCenter 并执行以下操作：
++
+.. 向ONTAP Select虚拟机添加软盘驱动器。
+.. 启动ONTAP Select虚拟机。
+.. 使用管理员帐户通过 SSHSign in到ONTAP CLI。
+
+
+. 节点启动后，验证存储故障转移是否已启用以及集群是否健康。
++
+.显示示例
+[%collapsible]
+====
+[listing]
+----
+ESX-2N_I2_N11N12::> storage failover show
+Takeover
+Node Partner Possible State Description
+-------------- -------------- -------- ---------------------------
+sdot-d200-011d sdot-d200-012d true Connected to sdot-d200-012d
+sdot-d200-012d sdot-d200-011d true Connected to sdot-d200-011d
+2 entries were displayed.
+ESX-2N_I2_N11N12::> cluster show
+Node Health Eligibility
+--------------------- ------- ------------
+sdot-d200-011d true true
+sdot-d200-012d true true
+2 entries were displayed.
+----
+====
+
+
+.完成后
+您必须对ONTAP Select集群中使用的每个主机执行升级过程。

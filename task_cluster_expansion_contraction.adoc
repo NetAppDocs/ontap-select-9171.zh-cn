@@ -1,0 +1,174 @@
+---
+sidebar: sidebar 
+permalink: task_cluster_expansion_contraction.html 
+keywords: cluster, expand, expansion, contract, contraction, six, eight, node deployment workflow, workflow, deployment steps 
+summary: 从ONTAP Select 9.15.1 开始，您可以增加或减少现有集群的大小。 
+---
+= 在 ESXi 或 KVM 主机上扩展或收缩ONTAP Select集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以增加 ESXi 和 KVM 虚拟机管理程序主机的现有ONTAP Select集群的集群大小。对于 KVM 主机，您可以将集群大小从 6 个节点增加到 8 个节点，或者将集群大小从 8 个节点减少到 6 个节点。对于 ESXi 主机，您可以在 6 到 12 个节点之间以增量增加或减少集群大小。
+
+ESXi 和 KVM 主机不支持以下集群扩展和收缩：
+
+* 从一个、两个或四个节点集群扩展至六个或八个节点集群。
+* 从六节点或八节点集群收缩为一节点、二节点或四节点集群。
+
+
+[NOTE]
+====
+要将集群中的节点数更改为集群扩展或收缩不支持的大小，您需要执行以下任务：
+
+. 使用以下方法部署新的多节点集群：link:task_cli_deploy_cluster.html["命令行界面"]或者link:task_deploy_cluster.html["网页用户界面"]随附ONTAP Select Deploy 管理实用程序。
+. 如果适用，请使用以下方法将数据迁移到新集群：link:https://docs.netapp.com/us-en/ontap/data-protection/snapmirror-disaster-recovery-concept.html["SnapMirror 复制"^] 。
+
+
+====
+您可以使用 CLI、API 或 Web 界面从ONTAP Select Deploy 启动集群扩展和收缩过程。
+
+
+
+== 硬件和存储注意事项
+
+以下 KVM 和 ESXi 虚拟机管理程序主机支持集群扩展和收缩功能。
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+从ONTAP Select 9.15.1 开始，ESXi 虚拟机管理程序主机支持集群扩展和收缩。
+
+以下 ESXi 虚拟机管理程序版本支持集群扩展和收缩：
+
+* ESXi 9.0
+* ESXi 8.0 U3
+* ESXi 8.0 U2
+* ESXi 8.0 U1
+* ESXi 8.0 正式版
+* ESXi 7.0 U3
+* ESXi 7.0
+
+
+--
+.KVM
+--
+从ONTAP Select 9.17.1 开始，KVM 虚拟机管理程序主机支持集群扩展和收缩。
+
+以下 KVM 虚拟机管理程序版本支持集群扩展和收缩：
+
+* Red Hat Enterprise Linux 64 位 9.6、9.5、9.4、9.3、9.2、9.1、9.0、8.8、8.7 和 8.6
+* Rocky Linux 9.6、9.5、9.4、9.3、9.2、9.1、9.0、8.9、8.8、8.7 和 8.6
+
+
+--
+====
+
+
+== 扩展集群
+
+使用集群扩展功能来增加现有 ESXi 或 KVM 集群的大小。
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+您可以按以下增量增加现有 ESXi 群集的大小：
+
+* 从六个节点到八个、十个或十二个节点
+* 从八个节点到十个或十二个节点
+* 从十到十二个节点
+
+
+--
+.KVM
+--
+您可以将现有 KVM 集群的大小从六个节点增加到八个节点。
+
+--
+====
+.关于此任务
+在准备集群扩展时，新的 ESXi 和 KVM 主机会被添加到清单中，并分配新节点的详细信息。在开始集群扩展过程之前，网络预检查会验证所选的内部网络。
+
+.开始之前
+* 部署多节点集群时，您应该熟悉网络连接检查器。您可以使用以下命令运行网络连接检查器：link:task_adm_connectivity.html["网页用户界面"]或者link:task_cli_connectivity.html["命令行界面"]。
+* 验证您是否拥有新节点的许可证详细信息。
+
+
+.步骤
+. 使用管理员帐户Sign in部署实用程序 Web 用户界面。
+. 选择页面顶部的“*Cluster*”选项卡，然后从列表中选择所需的集群。
+. 在集群详情页面，选择页面右侧的齿轮图标，然后选择*展开集群*。
+. 导航到 *HA Pair 4* 部分。
+. 为第四个 HA 对选择以下高可用性 (HA) 对配置详细信息：
++
+** 实例类型
+** 节点名称
+** 关联的虚拟机管理程序主机
+** 节点 IP 地址
+** 许可证
+** 网络配置
+** 存储配置（RAID 类型和存储池）
+
+
+. 选择“保存 HA 对”以保存配置详细信息。
+. 提供ONTAP凭据，然后选择*扩展集群*。
+. 选择“*下一步*”，然后选择“*运行*”运行网络预检查。
++
+网络预检查验证为ONTAP集群流量选择的内部网络是否正常运行。
+
+. 选择“*扩展集群*”开始集群扩展过程，然后在对话框中选择“*确定*”。
++
+集群扩展最多可能需要 45 分钟。
+
+. 监控多步骤集群扩展过程，以确认集群扩展成功。
+. 请参阅“事件”选项卡，了解操作进度的定期更新。该页面会定期自动刷新。
+
+
+.完成后
+link:task_cli_clusters.html["备份ONTAP Select Deploy 配置数据"]。
+
+
+
+== 收缩集群
+
+使用集群收缩功能来减少现有 ESXi 或 KVM 集群的大小。
+
+[role="tabbed-block"]
+====
+.ESXi
+--
+您可以按以下增量减少现有 ESXi 群集的大小：
+
+* 从十二个节点到十个、八个或六个节点
+* 从十个节点到八个或六个节点
+* 从八个节点到六个节点
+
+
+--
+.KVM
+--
+您可以将现有集群的大小从八个节点减少到六个节点。
+
+--
+====
+.关于此任务
+在此过程中，选择集群中所需的 HA 节点对，为集群收缩做准备。
+
+.步骤
+. 使用管理员帐户Sign in部署实用程序 Web 用户界面。
+. 选择页面顶部的“*Cluster*”选项卡，然后从列表中选择所需的集群。
+. 在集群详情页面，选择页面右侧的齿轮图标，然后选择*Contract Cluster*。
+. 选择要删除的任何 HA 对的 HA 对配置详细信息并提供ONTAP凭据，然后选择 *Contract Cluster*。
++
+集群收缩最多可能需要 30 分钟。
+
+. 监控多步骤集群收缩过程，确认集群收缩成功。
+. 请参阅“事件”选项卡，了解操作进度的定期更新。该页面会定期自动刷新。
+

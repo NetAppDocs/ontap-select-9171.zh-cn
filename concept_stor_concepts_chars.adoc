@@ -1,0 +1,180 @@
+---
+sidebar: sidebar 
+permalink: concept_stor_concepts_chars.html 
+keywords: ontap select, storage concepts 
+summary: 在探索特定存储组件之前，先了解适用于ONTAP Select环境的一般存储概念。 
+---
+= ONTAP Select存储：一般概念和特征
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+在探索特定存储组件之前，先了解适用于ONTAP Select环境的一般存储概念。
+
+
+
+== 存储配置阶段
+
+ONTAP Select主机存储的主要配置阶段包括以下内容：
+
+* 部署前的先决条件
++
+** 确保每个虚拟机管理程序主机都已配置并准备好进行ONTAP Select部署。
+** 配置涉及物理驱动器、RAID 控制器和组、LUN 以及相关的网络准备。
+** 此配置在ONTAP Select之外执行。
+
+
+* 使用虚拟机管理程序管理员实用程序进行配置
++
+** 您可以使用虚拟机管理程序管理实用程序（例如，VMware 环境中的 vSphere）配置存储的某些方面。
+** 此配置在ONTAP Select之外执行。
+
+
+* 使用ONTAP Select Deploy 管理实用程序进行配置
++
+** 您可以使用部署管理实用程序来配置核心逻辑存储结构。
+** 这可以通过 CLI 命令明确执行，也可以由实用程序作为部署的一部分自动执行。
+
+
+* 部署后配置
++
+** ONTAP Select部署完成后，您可以使用ONTAP CLI 或系统管理器配置集群。
+** 此配置在ONTAP Select Deploy 之外执行。
+
+
+
+
+
+
+== 托管存储与非托管存储
+
+ONTAP Select访问和直接控制的存储称为托管存储。同一虚拟机管理程序主机上的任何其他存储称为非托管存储。
+
+
+
+=== 同构物理存储
+
+组成ONTAP Select托管存储的所有物理驱动器必须是同构的。也就是说，所有硬件在以下特性方面必须相同：
+
+* 类型（SAS、NL-SAS、SATA、SSD）
+* 速度（转/分）
+
+
+
+
+== 本地存储环境说明
+
+每个虚拟机管理程序主机都包含本地磁盘和其他可供ONTAP Select使用的逻辑存储组件。这些存储组件按分层结构排列，从物理磁盘开始。
+
+image:ST_01.jpg["本地存储环境"]
+
+
+
+=== 本地存储组件的特性
+
+有几个概念适用于ONTAP Select环境中使用的本地存储组件。在准备ONTAP Select部署之前，您应该熟悉这些概念。这些概念按类别排列：RAID 组和 LUN、存储池和虚拟磁盘。
+
+
+
+==== 将物理驱动器分组为 RAID 组和 LUN
+
+可以将一个或多个物理磁盘本地连接到主机服务器，并供ONTAP Select使用。这些物理磁盘将分配给 RAID 组，然后作为一个或多个 LUN 呈现给虚拟机管理程序主机操作系统。每个 LUN 都作为物理硬盘呈现给虚拟机管理程序主机操作系统。
+
+配置ONTAP Select主机时，您应该注意以下事项：
+
+* 所有托管存储必须可通过单个 RAID 控制器访问
+* 根据供应商的不同，每个 RAID 控制器支持每个 RAID 组的最大驱动器数量
+
+
+
+
+==== 一个或多个 RAID 组
+
+每个ONTAP Select主机必须配备单个 RAID 控制器。您应该为ONTAP Select创建单个 RAID 组。但是，在某些情况下，您可能需要创建多个 RAID 组。参考link:reference_plan_best_practices.html["最佳实践摘要"]。
+
+
+
+=== 存储池注意事项
+
+在准备部署ONTAP Select时，您应该注意与存储池相关的几个问题。
+
+
+NOTE: 在 VMware 环境中，存储池与 VMware 数据存储同义。
+
+
+
+==== 存储池和 LUN
+
+每个 LUN 在虚拟机管理程序主机上被视为本地磁盘，并且可以成为一个存储池的一部分。每个存储池都使用虚拟机管理程序主机操作系统可以使用的文件系统进行格式化。
+
+您必须确保在ONTAP Select部署过程中正确创建存储池。您可以使用虚拟机管理程序管理工具创建存储池。例如，使用 VMware，您可以使用 vSphere 客户端创建存储池。然后，该存储池将传递到ONTAP Select Deploy 管理实用程序。
+
+
+
+=== 管理 ESXi 上的虚拟磁盘
+
+在准备部署ONTAP Select时，您应该注意几个与虚拟磁盘相关的问题。
+
+
+
+==== 虚拟磁盘和文件系统
+
+ONTAP Select虚拟机分配有多个虚拟磁盘驱动器。每个虚拟磁盘实际上是存储池中的一个文件，由虚拟机管理程序维护。ONTAPONTAP Select使用多种类型的磁盘，主要是系统磁盘和数据磁盘。
+
+您还应该了解有关虚拟磁盘的以下信息：
+
+* 在创建虚拟磁盘之前，存储池必须可用。
+* 在创建虚拟机之前无法创建虚拟磁盘。
+* 您必须依靠ONTAP Select Deploy 管理实用程序来创建所有虚拟磁盘（也就是说，管理员绝不能从 Deploy 实用程序之外创建虚拟磁盘）。
+
+
+
+
+==== 配置虚拟磁盘
+
+虚拟磁盘由ONTAP Select管理。当您使用 Deploy 管理实用程序创建集群时，会自动创建虚拟磁盘。
+
+
+
+== ESXi 上的外部存储环境图示
+
+ONTAP Select vNAS 解决方案支持ONTAP Select使用位于虚拟机管理程序主机外部存储上的数据存储。您可以使用 VMware vSAN 通过网络访问这些数据存储，也可以直接在外部存储阵列上访问。
+
+ONTAP Select可配置为使用虚拟机管理程序主机外部的以下类型的 VMware ESXi 网络数据存储库：
+
+* vSAN（虚拟 SAN）
+* VMFS
+* NFS
+
+
+
+
+=== vSAN 数据存储
+
+每个 ESXi 主机都可以拥有一个或多个本地 VMFS 数据存储。通常，这些数据存储只能由本地主机访问。但是，VMware vSAN 允许 ESXi 群集中的每个主机共享群集中的所有数据存储，就像它们是本地数据存储一样。下图说明了 vSAN 如何创建在 ESXi 群集中的主机之间共享的数据存储池。
+
+image:ST_02.jpg["ESXi 集群"]
+
+
+
+=== 外部存储阵列上的 VMFS 数据存储
+
+您可以创建位于外部存储阵列上的 VMFS 数据存储。可以使用多种不同的网络协议之一访问该存储。下图展示了使用 iSCSI 协议访问的外部存储阵列上的 VMFS 数据存储。
+
+
+NOTE: ONTAP Select支持 VMware 存储/SAN 兼容性文档中描述的所有外部存储阵列，包括 iSCSI、光纤通道和以太网光纤通道。
+
+image:ST_03.jpg["ESXi 虚拟机管理程序主机"]
+
+
+
+=== 外部存储阵列上的 NFS 数据存储
+
+您可以创建位于外部存储阵列上的 NFS 数据存储。该存储使用 NFS 网络协议进行访问。下图展示了一个位于外部存储上的 NFS 数据存储，可通过 NFS 服务器设备进行访问。
+
+image:ST_04.jpg["ESXi 虚拟机管理程序主机"]

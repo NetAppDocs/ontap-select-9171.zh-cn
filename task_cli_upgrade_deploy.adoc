@@ -1,0 +1,97 @@
+---
+sidebar: sidebar 
+permalink: task_cli_upgrade_deploy.html 
+keywords: administer, administering, cli, deploy, upgrade deploy 
+summary: 您可以使用命令行界面就地升级现有的 Deploy 实用程序虚拟机。 
+---
+= 升级ONTAP Select Deploy 实例
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以使用 ONTAP ONTAP Select ONTAP Select Deploy 实用程序虚拟机。
+
+.开始之前
+确保在升级期间不使用ONTAP Select Deploy 执行任何其他任务。有关升级ONTAP Select Deploy 实用程序的信息和限制，请参阅当前发行说明。
+
+[NOTE]
+====
+如果您安装了ONTAP Select Deploy 管理实用程序的旧实例，则应升级到当前版本。ONTAPONTAP Select节点和ONTAP Select Deploy 组件将单独升级。看link:concept_adm_upgrading_nodes.html["升级ONTAP Select节点"^]更多详情请见下文。
+
+您可以从 ONTAP ONTAP Select ONTAP Select Deploy 9.17.1。要从ONTAP Select Deploy 9.14.1 或更早版本升级，请查看ONTAP Select版本的发行说明。
+
+====
+
+
+== 步骤 1：下载软件包
+
+要开始升级过程，请从以下位置下载相应的ONTAP Select Deploy 虚拟机升级文件：link:https://mysupport.netapp.com/site/["NetApp 支持站点"^] 。升级包格式为单个压缩文件。
+
+.步骤
+. 访问link:https://mysupport.netapp.com/site/["NetApp 支持站点"^]使用网页浏览器，从“下载”菜单中选择“下载”。
+. 向下滚动并选择 * ONTAP Select Deploy Upgrade*。
+. 选择所需的升级包版本。
+. 查看最终用户许可协议 (EULA) 并选择*接受并继续*。
+. 选择并下载适当的包，根据您的环境需要响应所有提示。
+
+
+
+
+== 步骤 2：将软件包上传到ONTAP Select Deploy 虚拟机
+
+下载软件包后，您需要将文件上传到ONTAP Select Deploy 虚拟机。
+
+.关于此任务
+此任务介绍了一种将文件上传到ONTAP Select Deploy 虚拟机的方法。可能还有其他选项更适合您的环境。
+
+.开始之前
+* 验证升级文件是否在本地工作站上可用。
+* 验证您是否拥有管理员用户帐户的密码。
+
+
+.步骤
+. 在本地工作站的命令提示符中，使用 `scp`使用（安全复制协议）实用程序将映像文件上传到ONTAP Select Deploy 虚拟机，如下示例所示：
++
+....
+scp ONTAPdeploy2.12_upgrade.tar.gz admin@10.228.162.221:/home/admin (provide password when prompted)
+....
+
+
+.结果
+升级文件存储在管理员用户的主目录中。
+
+
+
+== 步骤3：应用升级包
+
+将升级文件上传到ONTAP Select Deploy 虚拟机后，即可应用升级。
+
+.开始之前
+* 验证升级文件在ONTAP Select Deploy 实用程序虚拟机中放置的目录。
+* 验证在执行升级时ONTAP Select Deploy 未用于执行任何其他任务。
+
+
+.步骤
+. 使用管理员帐户通过 SSHSign in到ONTAP Select Deploy 实用程序 CLI。
+. 使用适当的目录路径和文件名执行升级：
++
+[source, cli]
+----
+deploy upgrade -package-path <file_path>
+----
++
+示例命令：
+
++
+....
+deploy upgrade -package-path /home/admin/ONTAPdeploy2.12_upgrade.tar.gz
+....
+
+
+.完成后
+在升级过程完成之前，系统会要求您创建ONTAP Select Deploy 虚拟机配置的备份。此外，您应该清除浏览器缓存，以便可以查看新创建的ONTAP Select Deploy 页面。

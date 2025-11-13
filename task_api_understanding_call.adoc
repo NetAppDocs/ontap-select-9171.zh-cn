@@ -1,0 +1,28 @@
+---
+sidebar: sidebar 
+permalink: task_api_understanding_call.html 
+keywords: rest api, deploy rest api, rest, understanding, executing 
+summary: 所有 API 调用的详细信息均以通用格式记录并显示在ONTAP Select Deploy 在线文档网页上。通过了解单个 API 调用，您可以访问和解读所有 API 调用的详细信息。 
+---
+= 了解并执行ONTAP Select Deploy API 调用
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+所有 API 调用的详细信息均以通用格式记录并显示在ONTAP Select Deploy 在线文档网页上。通过了解单个 API 调用，您可以访问和解读所有 API 调用的详细信息。
+
+.开始之前
+您必须登录到ONTAP Select Deploy 在线文档网页。您必须拥有在创建ONTAP Select集群时为其分配的唯一标识符。
+
+.关于此任务
+您可以使用ONTAP Select集群的唯一标识符检索描述该集群的配置信息。在本例中，所有被归类为“廉价”的字段都会返回。但是，最佳做法是，您应该只请求所需的特定字段。
+
+.步骤
+. 在主页上，滚动到底部并单击*Cluster*。
+. 单击 *GET /clusters/{cluster_id}* 可显示用于返回有关ONTAP Select集群信息的 API 调用的详细信息。
+

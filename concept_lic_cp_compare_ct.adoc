@@ -1,0 +1,55 @@
+---
+sidebar: sidebar 
+permalink: concept_lic_cp_compare_ct.html 
+keywords: license, licensing, Capacity Pools, Capacity Tiers, comparing 
+summary: 容量池和容量层许可模型之间存在一些差异。 
+---
+= 比较ONTAP Select容量池和容量层许可
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+下表比较了ONTAP Select支持的两种生产许可模式。
+
+[cols="20,40,40"]
+|===
+|  | 容量层 | 容量池 
+
+
+| 许可证序列号 | NetApp生成并分配给节点的九位数字 | NetApp生成并分配给容量池的九位数字 
+
+
+| 许可证锁定 | 锁定到ONTAP Select节点 | 锁定到许可证管理器实例 
+
+
+| 许可证期限 | 永久（无需续订） | 根据购买而定的固定期限（需要续订） 
+
+
+| 数据聚合的租赁期限 | 不适用 | 一小时到七天 
+
+
+| 节点序列号 | 九位数字，等于许可证序列号 | 二十位数字，由许可证管理器生成 
+
+
+| 支持 | 附加功能和限时功能 | 包含并共同术语 
+
+
+| 许可证类型 | 标准型、高级型、高级 XL 型 | 标准型、高级型、高级 XL 型 
+
+
+| 评估许可证可用 | 是 | 是 
+
+
+| 生产升级评估 | 是 | 否 
+
+
+| ONTAP Select虚拟机大小调整（从小到中，从中到大） | 是 | 是 
+
+
+| 执法：执照已过期 | 不适用 | 是（无宽限期） 
+|===

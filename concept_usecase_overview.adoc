@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: concept_usecase_overview.html 
+keywords: ontap select, business use case overview, deployment, storage, development and testing 
+summary: ONTAP Select凭借通过虚拟机管理程序虚拟化提供的固有灵活性，适用于多种不同类型的应用程序。 
+---
+= ONTAP Select业务需求和使用场景
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select凭借通过虚拟机管理程序虚拟化提供的固有灵活性，适用于多种不同类型的应用程序。
+
+
+
+== 部署
+
+从高层次来看，您可以根据虚拟机管理程序主机服务器上的工作负载以两种不同的方式部署ONTAP Select 。
+
+
+
+=== 专用部署
+
+在专用部署模型中，单个ONTAP Select实例在主机服务器上运行。同一虚拟机管理程序主机上不运行任何其他重要处理。
+
+
+
+=== 共置部署
+
+在共置部署模型中， ONTAP Select与其他工作负载共享主机。具体来说，会有一些额外的虚拟机，每个虚拟机通常运行计算应用程序。这些计算工作负载位于ONTAP Select集群的本地。此模型支持专门的应用程序和部署要求。与专用部署模型一样，每个ONTAP Select虚拟机都必须在单独的专用虚拟机管理程序主机上运行。
+
+
+
+== 存储
+
+根据您的业务需求， ONTAP Select可以用作主存储或辅助存储。
+
+
+
+=== 主存储
+
+在某些情况下，您可以选择部署ONTAP Select作为主存储平台。这些实施类型会有所不同，具体取决于应用程序的工作负载特性以及您的业务目标。
+
+
+
+=== 灾难恢复和二级存储
+
+您可以使用ONTAP Select实现额外的存储，以增强您的主存储功能。额外的存储可用于支持您组织的灾难恢复工作和数据备份计划。
+
+
+
+== 开发和测试
+
+在组织内部署各种应用程序时，您可以将ONTAP Select用作整个应用程序开发和测试流程中不可或缺的一部分。例如，您可能需要临时存储来保存测试输入或输出数据。这些类型的部署时长可能因应用程序的特性和要求而异。

@@ -1,0 +1,42 @@
+---
+sidebar: sidebar 
+permalink: task_lic_acquire_ct.html 
+keywords: license, licensing, acquire, Capacity Tiers 
+summary: 使用容量层许可时，您需要为每个ONTAP Select节点获取一个许可证文件。该许可证文件定义了节点的存储容量，并通过NetApp分配的唯一九位序列号锁定到节点。 
+---
+= 获取ONTAP Select Capacity Tier 许可证
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+使用容量层许可时，您需要为每个ONTAP Select节点获取一个许可证文件。该许可证文件定义了节点的存储容量，并通过NetApp分配的唯一九位序列号锁定到节点。
+
+.开始之前
+您必须拥有NetApp分配给节点的九位数许可证序列号。在尝试获取许可证文件之前，您应该至少等待采购订单发货日期后的二十四小时。
+
+.关于此任务
+您必须为每个需要容量层许可证的ONTAP Select节点执行此任务。
+
+.步骤
+. 使用 Web 浏览器访问ONTAP Select许可证站点：
++
+`https://register.netapp.com/register/getlicensefile`
+
+. 使用您的NetApp帐户凭证Sign in。
+. 在*许可证生成器*页面上，从下拉框中选择所需的许可证。
+. 填写同一页面上的其余字段，包括 *产品序列号 *，即ONTAP Select节点的序列号。
+. 单击“*提交*”。
+. 请求验证后，选择许可证的交付方式。
++
+您可以点击*下载许可证*或*电子邮件许可证*。
+
+. 根据您选择的交付方式确认您收到了许可证文件。
+
+
+.完成后
+您必须先将许可证文件上传到 Deploy 管理实用程序，然后才能将其应用于ONTAP Select节点。

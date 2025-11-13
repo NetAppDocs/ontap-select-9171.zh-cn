@@ -1,0 +1,61 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_ots_vnas.html 
+keywords: plan, planning, vnas, vmware esxi, 
+summary: 您应考虑几个与使用 VMware ESXi 相关的规划问题。 
+---
+= ONTAP Select VMware ESXi 要求
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select vNAS 解决方案允许将ONTAP Select数据存储置于运行ONTAP Select虚拟机的 ESXi 虚拟机管理程序主机的外部。这些远程数据存储可以通过 VMware vSAN 或通用外部存储阵列访问。
+
+
+
+== 基本要求和限制
+
+ONTAP Select vNAS 解决方案可与任何规模的ONTAP Select集群一起使用。
+
+所有相关的存储组件，包括硬件、软件和功能要求，都必须符合以下文件中描述的要求：link:https://mysupport.netapp.com/matrix/["互操作性表工具"^] 。此外， ONTAP Select支持 VMware 存储/SAN 兼容性文档中描述的所有外部存储阵列，包括 iSCSI、NAS (NFSv3)、光纤通道和以太网光纤通道。外部阵列支持受限于ONTAP Select支持的 ESXi 版本。
+
+使用ONTAP Select vNAS 部署集群时支持以下 VMware 功能：
+
+* VMotion
+* 高可用性（HA）
+* 分布式资源调度器（DRS）
+
+
+
+NOTE: 这些 VMware 功能支持单节点和多节点ONTAP Select集群。部署多节点集群时，应确保同一集群中的两个或多个节点不在同一虚拟机管理程序主机上运行。
+
+以下 VMware 功能不受支持：
+
+* 容错（FT）
+* 虚拟数据存储 (VVOL)
+
+
+
+
+== 配置要求
+
+如果您计划在外部存储阵列（iSCSI、光纤通道、以太网光纤通道）上使用 VMFS 数据存储，则必须先创建 VMFS 存储池，然后再配置ONTAP Select以使用该存储。如果您使用 NFS 数据存储，则无需创建单独的 VMFS 数据存储。所有 vSAN 数据存储都必须在同一个 ESXi 集群中定义。
+
+
+CAUTION: 配置主机或执行存储添加操作时，必须为 VMware vSAN 或外部存储阵列上的每个数据存储提供容量限制。指定的容量必须在外部存储允许的存储限制范围内。如果您未提供容量限制，或者在磁盘创建操作期间外部存储空间不足，则会出现错误。
+
+
+
+== 最佳实践
+
+请参阅可用的 VMware 文档并遵循针对 ESXi 主机确定的适用最佳实践。此外：
+
+* 为ONTAP Select网络和外部存储（使用 iSCSI 或 NFS 时的 VMware vSAN 和通用存储阵列流量）定义专用网络端口、带宽和 vSwitch 配置
+* 配置容量选项以限制存储利用率（ONTAP Select不能消耗外部 vNAS 数据存储的全部容量）
+* 确保所有通用外部存储阵列尽可能使用可用的冗余和 HA 功能
+

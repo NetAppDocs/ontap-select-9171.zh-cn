@@ -1,0 +1,112 @@
+---
+sidebar: sidebar 
+permalink: task_cli_deploy_image_add.html 
+keywords: administer, administering, cli, deploy, ontap select image, add 
+summary: 您可以将ONTAP Select映像添加到 Deploy 管理实用程序实例中。安装映像后，您可以在部署ONTAP Select集群时使用它。 
+---
+= 将ONTAP Select映像添加到 Deploy
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以将ONTAP Select映像添加到 Deploy 管理实用程序实例中。安装映像后，您可以在部署ONTAP Select集群时使用它。
+
+.开始之前
+在将任何新的ONTAP Select映像添加到 Deploy 之前，您应该先删除所有不需要的映像。
+
+
+NOTE: 您只能添加版本低于 Deploy 实用程序实例所含原始版本的ONTAP Select映像。不支持添加NetApp提供的ONTAP Select更高版本。
+
+
+
+== 步骤 1：下载安装镜像
+
+要开始将ONTAP Select映像添加到 Deploy 实用程序实例，您必须从NetApp支持站点下载安装映像。ONTAPONTAP Select安装映像的格式为单个压缩文件。
+
+.步骤
+. 使用网络浏览器访问NetApp支持网站，然后选择“支持快速链接”。
+. 在“热门任务”下选择“下载软件”，然后登录网站。
+. 选择“查找您的产品”。
+. 向下滚动并选择 * ONTAP Select*。
+. 在“其他可用软件”下，选择“部署升级”、“节点升级”、“镜像安装”。
+. 选择所需的升级包版本。
+. 查看最终用户许可协议 (EULA)，然后单击“接受并继续”*。
+. 选择并下载适当的包，根据您的环境需要响应所有提示。
+
+
+
+
+== 步骤 2：将安装镜像上传到 Deploy 平台
+
+获取ONTAP Select安装映像后，您必须将该文件上传到 Deploy 虚拟机。
+
+.开始之前
+您必须在本地工作站上拥有可用的安装映像文件。您还必须拥有 Deploy 管理员用户帐户的密码。
+
+.关于此任务
+此任务描述了将文件上传到 Deploy 虚拟机的一种方法。可能还有其他更适合您环境的选项。
+
+.步骤
+. 在本地工作站的命令 shell 中，将映像文件上传到 Deploy 虚拟机，如下示例所示：
++
+....
+scp image_v_93_install_esx.tgz admin@10.234.81.101:/home/admin (provide password when prompted)
+....
++
+....
+sftp admin@10.234.81.101 (provide password when prompted)
+put image_v_93_install_esx.tgz
+exit
+....
+
+
+.结果
+节点安装文件存储在管理员用户的主目录中。
+
+
+
+== 步骤 3：添加安装镜像
+
+将ONTAP Select安装映像添加到部署映像目录，以便在部署新集群时可以使用。
+
+.开始之前
+您必须知道安装映像文件在 Deploy 实用程序虚拟机中的哪个目录中。假设该文件位于管理员的主目录中。
+
+.步骤
+. 使用管理员 (admin) 帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 启动 Bash shell：
+
+
+[listing]
+----
+shell bash
+----
+. 将安装镜像文件放入 images 目录，如下例所示：
++
+`tar -xf image_v_93_install_esx.tgz -C /opt/netapp/images/`
+
+
+
+
+
+== 步骤 4：显示可用的安装映像
+
+显示部署新集群时可用的ONTAP Select镜像。
+
+.步骤
+. 访问部署实用程序虚拟机上的在线文档网页，并使用管理员 (admin) 帐户登录：
++
+`\http://<FQDN|IP_ADDRESS>/api/ui`
+
++
+使用 Deploy 虚拟机的域名或 IP 地址。
+
+. 导航到页面底部，选择“部署”，然后选择“获取/images”。
+. 选择“立即体验！”以显示可用的ONTAP Select图片。
+. 确认所需图像可用。
+

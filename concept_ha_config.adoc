@@ -1,0 +1,71 @@
+---
+sidebar: sidebar 
+permalink: concept_ha_config.html 
+keywords: ontap select, high availability configurations, two-node ha, multi-node ha, mc sds 
+summary: 探索高可用性选项，为您的环境选择最佳的 HA 配置。 
+---
+= ONTAP Select高可用性配置
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+探索高可用性选项，为您的环境选择最佳的 HA 配置。
+
+尽管客户开始将应用程序工作负载从企业级存储设备迁移到运行在商用硬件上的基于软件的解决方案，但对弹性和容错能力的期望和需求并未改变。提供零恢复点目标 (RPO) 的高可用性 (HA) 解决方案可以保护客户免受基础架构堆栈中任何组件故障导致的数据丢失。
+
+很大一部分 SDS 市场建立在无共享存储的概念之上，软件复制通过在不同的存储孤岛中存储多个用户数据副本来提供数据弹性。ONTAPONTAP Select基于此前提构建，使用ONTAP提供的同步复制功能 (RAID SyncMirror ) 在集群内存储额外的用户数据副本。这发生在 HA 对的环境中。每个 HA 对都存储两个用户数据副本：一个在本地节点提供的存储上，另一个在 HA 合作伙伴提供的存储上。在ONTAP Select集群中，HA 和同步复制绑定在一起，两者的功能不能分离或独立使用。因此，同步复制功能仅在多节点产品中可用。
+
+
+NOTE: 在ONTAP Select集群中，同步复制功能是 HA 实现的功能，而不是异步SnapMirror或SnapVault复制引擎的替代品。同步复制不能独立于 HA 使用。
+
+ONTAP Select HA 部署模型有两种：多节点集群（四节点、六节点或八节点）和双节点集群。双节点ONTAP Select集群的显著特点是使用外部调解器服务来解决脑裂问题。ONTAPDeployONTAP机充当其配置的所有双节点 HA 对的默认调解器。
+
+下图表示了这两种架构。
+
+*带有远程调解器并使用本地连接存储的双节点ONTAP Select集群*
+
+image:DDHA_01.jpg["具有远程调解器并使用本地连接存储的双节点ONTAP Select集群"]
+
+
+NOTE: 双节点ONTAP Select集群由一个 HA 对和一个调解器组成。在 HA 对中，每个集群节点上的数据聚合都会同步镜像，因此即使发生故障转移，也不会丢失数据。
+
+*使用本地附加存储的四节点ONTAP Select集群*image:DDHA_02.jpg["使用本地连接存储的四节点ONTAP Select集群"]
+
+* 四节点ONTAP Select集群由两个 HA 对组成。六节点和八节点集群分别由三个和四个 HA 对组成。在每个 HA 对中，每个集群节点上的数据聚合都会同步镜像，因此即使发生故障转移，也不会丢失数据。
+* 使用 DAS 存储时，物理服务器上只能存在一个ONTAP Select实例。ONTAPONTAP Select需要对系统的本地 RAID 控制器进行非共享访问，并且旨在管理本地连接的磁盘，而如果没有与存储的物理连接，则无法实现这一点。
+
+
+
+
+== 双节点 HA 与多节点 HA
+
+与FAS阵列不同，HA 对中的ONTAP Select节点仅通过 IP 网络进行通信。这意味着 IP 网络存在单点故障 (SPOF)，因此，防止网络分区和脑裂情况成为设计的一个重要方面。多节点集群可以承受单节点故障，因为集群仲裁可以由三个或更多幸存节点建立。双节点集群依靠ONTAP Deploy 虚拟机托管的调解器服务来实现相同的结果。
+
+ONTAP Select节点和ONTAP Deploy 中介服务之间的心跳网络流量极小且具有弹性，因此ONTAP Deploy VM 可以托管在与ONTAP Select双节点集群不同的数据中心。
+
+
+NOTE: ONTAP Deploy 虚拟机在充当双节点集群的调解器时，将成为该集群不可或缺的一部分。如果调解器服务不可用，双节点集群将继续提供数据，但ONTAP Select集群的存储故障转移功能将被禁用。因此， ONTAP Deploy 调解器服务必须与 HA 对中的每个ONTAP Select节点保持持续通信。为了确保集群仲裁正常运行，最低带宽要求为 5Mbps，最大往返时间 (RTT) 延迟要求为 125 毫秒。
+
+如果充当调解器的ONTAP Deploy 虚拟机暂时或可能永久不可用，则可以使用辅助ONTAP Deploy 虚拟机来恢复双节点集群仲裁。这会导致新的ONTAP Deploy 虚拟机无法管理ONTAP Select节点，但可以成功参与集群仲裁算法。ONTAPONTAP Select节点与ONTAP Deploy 虚拟机之间的通信是通过 IPv4 上的 iSCSI 协议完成的。ONTAPONTAP Select节点管理 IP 地址是启动器， ONTAP Deploy 虚拟机 IP 地址是目标。因此，在创建双节点集群时，节点管理 IP 地址无法支持 IPv6 地址。在创建双节点集群时，系统会自动创建ONTAP Deploy 托管的邮箱磁盘，并将其屏蔽为正确的ONTAP Select节点管理 IP 地址。整个配置在设置过程中自动执行，无需进一步的管理操作。创建集群的ONTAP Deploy 实例是该集群的默认调解器。
+
+如果必须更改原始调解器位置，则需要执行管理操作。即使原始ONTAP Deploy 虚拟机丢失，也可以恢复集群仲裁。但是， NetApp建议您在每个双节点集群实例化后备份ONTAP Deploy 数据库。
+
+
+
+== 双节点 HA 与双节点延伸 HA (MetroCluster SDS)
+
+可以将双节点主动/主动 HA 集群扩展到更远的距离，并可能将每个节点放置在不同的数据中心。双节点集群和双节点延伸集群（也称为MetroCluster SDS）之间的唯一区别在于节点之间的网络连接距离。
+
+双节点集群定义为两个节点位于同一数据中心且相距 300 米以内的集群。通常，两个节点都具有到同一网络交换机或一组交换机间链路 (ISL) 网络交换机的上行链路。
+
+双节点MetroCluster SDS 是指节点物理上相距超过 300 米（不同房间、不同建筑和不同数据中心）的集群。此外，每个节点的上行链路连接分别连接到单独的网络交换机。MetroClusterMetroCluster不需要专用硬件。但是，该环境应满足延迟（RTT 最大 5 毫秒，抖动最大 5 毫秒，总计 10 毫秒）和物理距离（最大 10 公里）的要求。
+
+MetroCluster SDS 是一项高级功能，需要 Premium 许可证或 Premium XL 许可证。Premium许可证支持创建中小型虚拟机以及 HDD 和 SSD 介质。PremiumXL 许可证还支持创建 NVMe 驱动器。
+
+
+NOTE: MetroCluster SDS 支持本地连接存储 (DAS) 和共享存储 (vNAS)。请注意，由于ONTAP Select虚拟机与共享存储之间的网络，vNAS 配置通常具有较高的固有延迟。MetroClusterSDS 配置必须在节点之间提供最多 10 毫秒的延迟，其中包括共享存储延迟。换句话说，仅测量 Select 虚拟机之间的延迟是不够的，因为对于这些配置来说，共享存储延迟不可忽略。

@@ -1,0 +1,46 @@
+---
+sidebar: sidebar 
+permalink: concept_nw_data_mgmt_separation.html 
+keywords: ontap select, traffic separation 
+summary: 将数据流量和管理流量隔离到单独的第 2 层网络中。 
+---
+= ONTAP Select数据和管理流量分离
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+将数据流量和管理流量隔离到单独的第 2 层网络中。
+
+ONTAP Select外部网络流量定义为数据（CIFS、NFS 和 iSCSI）、管理和复制 (SnapMirror) 流量。在ONTAP集群中，每种类型的流量都使用单独的逻辑接口，该接口必须托管在虚拟网络端口上。在ONTAP Select的多节点配置中，这些端口被指定为端口 e0a 和 e0b/e0g。在单节点配置中，这些端口被指定为 e0a 和 e0b/e0c，其余端口则保留用于内部集群服务。
+
+NetApp建议将数据流量和管理流量隔离到单独的第 2 层网络中。在ONTAP Select环境中，这可以通过使用 VLAN 标记来实现。您可以通过将带有 VLAN 标记的端口组分配给网络适配器 1（端口 e0a）来实现管理流量。然后，您可以为端口 e0b 和 e0c（单节点集群）以及 e0b 和 e0g（多节点集群）分配单独的端口组来传输数据流量。
+
+如果本文档前面介绍的 VST 解决方案不够用，则可能需要在同一个虚拟端口上共置数据 LIF 和管理 LIF。为此，请使用称为 VGT 的流程，其中 VLAN 标记由虚拟机执行。
+
+
+NOTE: 使用ONTAP Deploy 实用程序时，无法通过 VGT 分离数据和管理网络。此过程必须在集群设置完成后执行。
+
+使用 VGT 和双节点集群时，还有一个需要注意的事项。在双节点集群配置中，节点管理 IP 地址用于在ONTAP完全可用之前建立与中介器的连接。因此，映射到节点管理 LIF（端口 e0a）的端口组仅支持 EST 和 VST 标记。此外，如果管理和数据流量都使用同一个端口组，则整个双节点集群仅支持 EST/VST。
+
+VST 和 VGT 两种配置选项均受支持。下图显示了第一种方案 VST，其中流量通过分配的端口组在 vSwitch 层进行标记。在此配置中，集群和节点管理 LIF 分配给ONTAP端口 e0a，并通过分配的端口组标记为 VLAN ID 10。数据 LIF 分配给端口 e0b 以及 e0c 或 e0g，并使用第二个端口组指定 VLAN ID 20。集群端口使用第三个端口组，位于 VLAN ID 30 上。
+
+*使用 VST 进行数据和管理分离*
+
+image:DDN_04.jpg["使用 VST 进行数据和管理分离"]
+
+下图显示了第二种场景 VGT，其中ONTAP虚拟机使用放置在单独广播域中的 VLAN 端口标记流量。在此示例中，虚拟端口 e0a-10/e0b-10/(e0c 或 e0g)-10 和 e0a-20/e0b-20 位于虚拟机端口 e0a 和 e0b 之上。此配置允许直接在ONTAP内部执行网络标记，而不是在 vSwitch 层执行。管理和数据 LIF 位于这些虚拟端口上，从而允许在单个虚拟机端口内进一步进行第 2 层细分。集群 VLAN（VLAN ID 30）仍在端口组中标记。
+
+*笔记：*
+
+* 这种配置方式在使用多个 IP 空间时尤其适用。如果需要进一步的逻辑隔离和多租户功能，可以将 VLAN 端口分组到单独的自定义 IP 空间中。
+* 要支持 VGT，ESXi/ESX 主机网络适配器必须连接到物理交换机上的中继端口。连接到虚拟交换机的端口组必须将其 VLAN ID 设置为 4095，以便在端口组上启用中继功能。
+
+
+*使用 VGT 进行数据和管理分离*
+
+image:DDN_05.jpg["使用 VGT 进行数据和管理分离"]

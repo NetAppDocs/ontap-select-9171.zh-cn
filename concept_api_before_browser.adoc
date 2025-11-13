@@ -1,0 +1,39 @@
+---
+sidebar: sidebar 
+permalink: concept_api_before_browser.html 
+keywords: rest api, deploy rest api, rest, access browser, before you begin 
+summary: 在使用部署在线文档页面之前，您应该注意几件事。 
+---
+= 在使用浏览器访问ONTAP Select Deploy API 之前
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+在使用部署在线文档页面之前，您应该注意几件事。
+
+
+
+== 部署计划
+
+如果您打算在执行特定部署或管理任务的过程中发出 API 调用，则应考虑制定部署计划。这些计划可以是正式的，也可以是非正式的，通常包含您的目标和要使用的 API 调用。有关更多信息，请参阅使用部署 REST API 的工作流流程。
+
+
+
+== JSON 示例和参数定义
+
+文档页面上的每个 API 调用都采用一致的格式进行描述。内容包括实现说明、查询参数和 HTTP 状态代码。此外，您还可以显示 API 请求和响应中使用的 JSON 的详细信息，如下所示：
+
+* 示例值 如果您在 API 调用中点击“示例值”，则会显示该调用的典型 JSON 结构。您可以根据需要修改该示例，并将其用作请求的输入。
+* 模型如果单击“模型”，则会显示 JSON 参数的完整列表，其中包含每个参数的描述。
+
+
+
+
+== 发出 API 调用时需谨慎
+
+您使用部署文档页面执行的所有 API 操作均为实时操作。请务必小心，切勿误创建、更新或删除配置或其他数据。

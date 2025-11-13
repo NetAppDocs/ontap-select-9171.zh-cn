@@ -1,0 +1,27 @@
+---
+sidebar: sidebar 
+permalink: concept_usecase_private_cloud.html 
+keywords: ontap select, private cloud 
+summary: ONTAP Select非常适合支持您组织内的一个或多个私有云。一个常见的用例是为基于商用服务器构建的私有云提供存储服务。 
+---
+= ONTAP Select对私有云和数据中心的支持
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select非常适合支持您组织内的一个或多个私有云。一个常见的用例是为基于商用服务器构建的私有云提供存储服务。
+
+与公有云类似，私有云也提供灵活性以及快速的设置和拆除。此外，私有云还提供了更高的安全性和控制力。
+
+下图显示了存储场如何为ONTAP Select虚拟机提供计算和本地连接存储，而 ONTAP Select 虚拟机则为应用程序堆栈上游提供存储服务。从 SVM 的配置到应用程序虚拟机的部署和配置，整个工作流程都通过私有云编排框架实现自动化。
+
+这是一种面向服务的私有云模型。使用ONTAP Select的高可用性版本，可以获得与高成本FAS阵列相同的ONTAP体验。存储服务器资源仅由ONTAP Select虚拟机使用，而应用程序虚拟机则托管在单独的物理基础架构上。
+
+*基于DAS构建的私有云*
+
+image:PrivateCloud_01.jpg["基于DAS构建的私有云"]

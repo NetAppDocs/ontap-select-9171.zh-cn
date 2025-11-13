@@ -1,0 +1,119 @@
+---
+sidebar: sidebar 
+permalink: task_cli_migrate_deploy.html 
+keywords: administer, administering, cli, deploy, deploy instance, migrate 
+summary: 您可以使用命令行界面将 Deploy 管理实用程序的现有实例迁移到新的虚拟机。 
+---
+= 将ONTAP Select Deploy 实例迁移到新的虚拟机
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以使用命令行界面将 Deploy 管理实用程序的现有实例迁移到新的虚拟机。
+
+此过程基于创建一个使用原始虚拟机配置数据的新虚拟机。新虚拟机和原始虚拟机必须运行相同版本和发行版的 Deploy 实用程序。您无法迁移到其他版本和发行版的 Deploy 实用程序。
+
+
+
+== 步骤 1：备份部署配置数据
+
+在迁移虚拟机的过程中，您必须创建 Deploy 配置数据的备份。部署ONTAP Select集群后，您也应该创建备份。数据将保存到一个加密文件中，您可以将其下载到本地工作站。
+
+.开始之前
+* 确保 Deploy 在备份操作期间没有执行任何其他任务。
+* 保存原始的 Deploy 虚拟机映像。
++
+
+CAUTION: 在此过程的稍后部分，当您将 Deploy 配置数据从原始虚拟机还原到新虚拟机时，需要原始 Deploy 虚拟机映像。
+
+
+
+.关于此任务
+您创建的备份文件会捕获虚拟机的所有配置数据。这些数据描述了部署环境的各个方面，包括ONTAP Select集群。
+
+.步骤
+. 使用管理员帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 创建 Deploy 配置数据的备份，该备份存储在 Deploy 服务器的内部目录中：
++
+[source, cli]
+----
+deploy backup create
+----
+. 出现提示时，请提供备份密码。
++
+备份文件根据密码加密。
+
+. 显示系统中可用的备份：
++
+[source, cli]
+----
+deploy backup show -detailed
+----
+. 根据“*创建*”字段中的日期选择您的备份文件并记录“*下载 URL*”值。
++
+您可以通过 URL 访问备份文件。
+
+. 使用 Web 浏览器或实用程序（例如 Curl），通过 URL 将备份文件下载到本地工作站。
+
+
+
+
+== 步骤 2：安装 Deploy 虚拟机的新实例
+
+您必须创建 Deploy 虚拟机的新实例，并使用原始虚拟机的配置数据对其进行更新。
+
+.开始之前
+您必须熟悉在 VMware 环境中下载和部署ONTAP Select Deploy 虚拟机的步骤。
+
+.关于此任务
+此任务以高层次进行描述。
+
+.步骤
+. 创建 Deploy 虚拟机的新实例：
++
+.. 下载虚拟机映像。
+.. 部署虚拟机并配置网络接口。
+.. 使用 SSH 访问 Deploy 实用程序。
+
+
+
+
+.相关信息
+link:task_install_deploy.html["安装ONTAP Select Deploy"]
+
+
+
+== 步骤 3：将部署配置数据恢复到新的虚拟机
+
+您必须将配置数据从原始 Deploy 实用程序虚拟机还原到新的虚拟机。这些数据位于一个文件中，您必须从本地工作站上传该文件。
+
+.开始之前
+您必须拥有先前备份的配置数据。该数据包含在单个文件中，并且必须在您的本地工作站上可用。
+
+.步骤
+. 在本地工作站的命令 shell 中，使用 sftp 实用程序将备份文件上传到 Deploy 虚拟机，如下例所示：
++
+....
+sftp admin@10.234.81.101 (provide password when prompted)
+put deploy_backup_20190601162151.tar.gz
+exit
+....
+. 使用管理员帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 恢复配置数据：
++
+[source, cli]
+----
+deploy backup restore -path <path_name> -filename <file_name>
+----
++
+示例命令
+
++
+`deploy backup restore -path /home/admin -filename deploy_backup_20180601162151.tar.gz`
+
+

@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: task_cli_deploy_image_remove.html 
+keywords: administer, administering, cli, deploy, ontap select image, remove 
+summary: 当不再需要ONTAP Select映像时，您可以从 Deploy 管理实用程序实例中删除它们。 
+---
+= 从 Deploy 中删除ONTAP Select映像
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+当不再需要ONTAP Select映像时，您可以从 Deploy 管理实用程序实例中删除它们。
+
+
+CAUTION: 您不应删除集群正在使用的任何ONTAP Select映像。
+
+.关于此任务
+您可以删除集群当前未使用或计划在未来集群部署中使用的旧ONTAP Select映像。
+
+.步骤
+. 使用管理员 (admin) 帐户通过 SSHSign in到 Deploy 实用程序 CLI。
+. 显示由 Deploy 管理的集群并记录正在使用的ONTAP映像：
++
+[source, cli]
+----
+cluster show
+----
++
+请注意每种情况下的版本号和虚拟机管理程序平台。
+
+. 启动 Bash shell：
++
+[source, cli]
+----
+shell bash
+----
+. 显示所有可用的ONTAP Select映像：
++
+[source, cli]
+----
+ls -lh /opt/netapp/images
+----
+. 可以选择使用虚拟机管理程序主机删除ONTAP Select映像。
++
+[role="tabbed-block"]
+====
+.ESXi 示例
+--
+[source, asciidoc]
+----
+rm -r /opt/netapp/images/DataONTAPv-9.3RC1-vidconsole-esx.ova
+----
+--
+.KVM 示例
+--
+[source, asciidoc]
+----
+rm -r /opt/netapp/images/DataONTAPv-9.3RC1-serialconsole-kvm.raw.tar
+----
+--
+====
+

@@ -1,0 +1,111 @@
+---
+sidebar: sidebar 
+permalink: concept_terminology.html 
+keywords: terminology, key concepts, concepts 
+summary: 当您开始探索ONTAP Select并规划部署时，首先熟悉术语和关键概念会很有帮助。 
+---
+= ONTAP Select术语和关键概念
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+当您开始探索ONTAP Select并规划部署时，首先熟悉术语和关键概念会很有帮助。
+
+ONTAP Select Deploy:: ONTAP Select Deploy 是用于部署ONTAP Select集群的管理实用程序。该 Deploy 实用程序在专用 Linux 虚拟机中运行。您可以通过 Web 用户界面、CLI 管理 Shell 和 REST API 访问该 Deploy 实用程序。
+基于内核的虚拟机:: 基于内核的虚拟机 (KVM) 是 Linux 内核的一项虚拟化功能，使其能够充当虚拟机管理程序平台。它支持多种客户操作系统。
+虚拟机管理程序主机与ONTAP Select节点:: _虚拟机管理程序主机_是托管ONTAP Select虚拟机的核心硬件平台。当ONTAP Select虚拟机在虚拟机管理程序主机上部署并处于活动状态时，它将被视为 _ONTAP Select 节点_。
+ONTAP Select 集群:: 您可以创建由一个、两个、四个、六个或八个节点组成的 ONTAP Select 集群。多节点集群始终包含一个或多个 HA 对。例如，一个四节点集群由两个 HA 对组成。单节点集群不提供 HA 功能。
+虚拟机管理程序主机环境的准备:: 在使用 Deploy 管理实用程序部署ONTAP Select集群之前，您需要准备将运行ONTAP Select 的虚拟机管理程序主机，包括存储和网络环境。此主机预配置是根据当前要求和限制在ONTAP Select产品之外完成的。
+评估与生产部署:: 每个ONTAP Select节点都使用_评估许可证_或_购买许可证_运行。使用评估许可证，您可以在将ONTAP Select部署到生产环境之前对其进行评估。评估许可证会自动生成并应用。如果您在生产环境中部署集群，则必须购买许可证，这需要选择：
++
+--
+* 许可模式
+* 存储容量
+* 平台许可证产品
+
+
+--
+容量层级许可模型:: 容量层许可模式是为ONTAP Select部署许可存储时的原始选项。它基于与NetApp AFF和FAS一起使用的ONTAP模型。每个节点都需要单独的许可证。存储容量锁定到节点并且是永久的（无需续订）。
+容量池许可模型:: 容量池许可模式是ONTAP Select 9.5 使用 Deploy 2.10 版本引入的。每个存储容量池都需要单独的许可证。容量池许可证锁定到许可证管理器实例（即 Deploy 实例），并且必须根据购买条款进行续订。您可以在组织中许可和使用任意数量的容量池。但是，由于容量池由ONTAP Select节点共享，因此所需的许可证数量通常比容量层许可要少。
+许可证管理器:: 许可证管理器是一个支持容量池许可的软件组件。它目前是 Deploy 管理实用程序的一部分。LM从其管理的共享池中将存储租赁给ONTAP Select节点。许可证锁定 ID 是一个数字字符串，用于唯一标识每个 LM 实例，从而唯一标识每个 Deploy 实例。您必须同时使用容量池许可证序列号和 LLID 来生成许可证文件。
+平台许可证产品:: 有三种许可证可供选择，它们决定了您购买许可证时ONTAP Select虚拟机的大小功能：
++
+--
+* 标准
+* 高级
+* 高级加大码
+
+
+--
+
+
+有关更多信息，请参阅“计划”和“许可证”两个部分。
+
+存储池与数据存储:: ONTAP Select存储池是一个逻辑数据容器，旨在抽象和隐藏底层物理存储。存储池独立于虚拟机管理程序。当部署在 ESXi 虚拟机管理程序主机上时， ONTAP Select存储池与 VMware 数据存储区同义。
+集群 MTU:: 集群 MTU 功能允许您配置ONTAP Select多节点集群所使用的内部网络的 MTU 大小。Deploy管理实用程序会在您配置 HA 对时调整 MTU 大小，以适应您的网络环境。您也可以手动设置该值。
+ONTAP Select vNAS:: ONTAP Select vNAS 解决方案允许ONTAP Select节点访问外部存储上的 VMware 数据存储。使用ONTAP Select vNAS，不再需要本地 RAID 控制器；RAID 功能假定由远程存储提供。ONTAPONTAP Select vNAS 可以通过以下方式配置：
++
+--
+* VMware vSAN
+* 通用外部存储阵列
+
+
+--
+
+
+在这两种情况下，都必须在创建ONTAP Select集群或扩展现有节点的存储容量之前配置外部存储。
+
+ESXi VM 上的节点重新托管:: 当您部署使用可通过ONTAP Select vNAS 解决方案（VMware vSAN 或通用外部存储阵列）获得的外部存储的集群时，可以通过利用以下 VMware 功能的操作来移动托管ONTAP Select节点的 ESXi 虚拟机：
++
+--
+* vMotion
+* 高可用性（HA）
+* 分布式资源调度器（DRS）
++
+ONTAP Select Deploy 实用程序会在集群上执行操作时检测虚拟机的移动，例如：
+
+* 集群在线
+* 集群离线
+* 存储添加
++
+移动虚拟机时，Deploy 实用程序会更新其内部数据库并配置新的 ESXi 主机。在ONTAP Select节点上执行的所有操作都将被阻止，直到虚拟机移动和 Deploy 更新完成为止。
+
+
+
+--
+用于 KVM 的 Open vSwitch:: Open vSwitch (OVS) 是一个支持多种网络协议的虚拟交换机的软件实现。OVS是开源的，遵循 Apache 2.0 许可证。
+中介服务:: ONTAP Select Deploy 实用程序包含一个中介服务，该服务连接到活动的双节点集群中的节点。此服务监控每个 HA 对并协助管理故障。
+
+
+
+CAUTION: 如果您有一个或多个活动的双节点集群，则管理这些集群的ONTAP Select Deploy 虚拟机必须始终处于运行状态。如果 Deploy 虚拟机暂停，则调解器服务将不可用，并且双节点集群将失去 HA 功能。
+
+MetroCluster SDS:: MetroCluster SDS 是一项功能，可在部署双节点ONTAP Select集群时提供额外的配置选项。与典型的双节点 ROBO 部署不同， MetroCluster SDS 节点之间的距离可以远得多。这种物理隔离支持更多用例，例如灾难恢复。您必须拥有 Premium 或更高级别的许可证才能使用MetroCluster SDS。此外，节点之间的网络必须支持最低延迟要求。
+凭证存储:: Deploy 凭据存储是一个安全的数据库，用于保存帐户凭据。它主要用于在创建新集群的过程中注册虚拟机管理程序主机。有关更多信息，请参阅“计划”部分。
+存储效率:: ONTAP Select提供的存储效率选项与FAS和AFF阵列上的存储效率选项类似。从概念上讲，配备直连存储 (DAS) SSD（使用高级许可证）的ONTAP Select与AFF阵列类似。使用配备 HDD 的 DAS 配置以及所有 vNAS 配置应被视为与FAS阵列类似。这两种配置之间的主要区别在于，配备 DAS SSD 的ONTAP Select支持内联聚合级别重复数据删除和聚合级别后台重复数据删除。其余存储效率选项适用于这两种配置。
++
+--
+vNAS 默认配置启用了一项称为单实例数据日志记录 (SIDL) 的写入优化功能。在ONTAP Select 9.6 及更高版本中，启用 SIDL 后，后台ONTAP存储效率功能将不再可用。有关更多信息，请参阅“深入了解”部分。
+
+--
+集群刷新:: 创建集群后，您可以使用ONTAP或虚拟机管理程序管理工具在 Deploy 实用程序之外更改集群或虚拟机配置。您还可以迁移导致配置更改的虚拟机。发生这些更改时，Deploy 实用程序不会自动更新，并且可能与集群状态不同步。您可以使用集群刷新功能更新 Deploy 配置数据库。集群刷新功能可通过 Deploy Web 用户界面、CLI 管理 Shell 和 REST API 进行。
+软件 RAID:: 使用直连存储 (DAS) 时，RAID 功能通常通过本地硬件 RAID 控制器提供。您可以改为将节点配置为使用软件 RAID，其中ONTAP Select节点提供 RAID 功能。如果您使用软件 RAID，则不再需要硬件 RAID 控制器。
+
+
+[[ontap-select-image-install]]
+ONTAP Select映像安装:: 部署管理实用程序仅包含一个版本的ONTAP Select。其中包含的版本是发行时可用的最新版本。ONTAPONTAP Select映像安装功能允许您将早期版本的ONTAP Select添加到 Deploy 实用程序实例中，然后在部署ONTAP Select集群时使用该实例。看link:task_cli_deploy_image_add.html["添加ONTAP Select图像以获取更多信息"]。
+
+
+
+NOTE: 您只能添加版本低于 Deploy 实例所含原始版本的ONTAP Select映像。不支持在不更新 Deploy 的情况下添加更高版本的ONTAP Select 。
+
+部署ONTAP Select集群后对其进行管理:: 部署ONTAP Select集群后，您可以像配置基于硬件的ONTAP集群一样配置该集群。例如，您可以使用 System Manager 或标准ONTAP命令行界面配置ONTAP Select集群。
+
+
+.相关信息
+link:task_cli_deploy_image_add.html["将ONTAP Select映像添加到 Deploy"]

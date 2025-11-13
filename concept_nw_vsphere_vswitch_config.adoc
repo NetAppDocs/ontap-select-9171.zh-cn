@@ -1,0 +1,156 @@
+---
+sidebar: sidebar 
+permalink: concept_nw_vsphere_vswitch_config.html 
+keywords: ontap select, standard and distributed vSwitch configurations, vSwitch configuration and load-balancing policies 
+summary: ONTAP Select vSwitch 配置和双 NIC 和四 NIC 配置的负载平衡策略。 
+---
+= ONTAP SelectVMware vSphere vSwitch 配置
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+ONTAP Select vSwitch 配置和双 NIC 和四 NIC 配置的负载平衡策略。
+
+ONTAP Select支持使用标准和分布式 vSwitch 配置。分布式 vSwitch 支持链路聚合结构 (LACP)。链路聚合是一种常见的网络结构，用于聚合跨多个物理适配器的带宽。LACP是一种与供应商无关的标准，它为网络端点提供了一种开放协议，可将多组物理网络端口捆绑到单个逻辑通道中。ONTAPONTAP Select可以与配置为链路聚合组 (LAG) 的端口组配合使用。但是， NetApp建议将各个物理端口用作简单的上行链路（中继）端口，以避免 LAG 配置。在这些情况下，标准和分布式 vSwitch 的最佳实践是相同的。
+
+本节介绍双 NIC 和四 NIC 配置中应使用的 vSwitch 配置和负载平衡策略。
+
+配置ONTAP Select使用的端口组时，应遵循以下最佳实践；端口组级别的负载平衡策略是基于源虚拟端口 ID 的路由。VMwareVMware 建议将连接到 ESXi 主机的交换机端口上的 STP 设置为 Portfast。
+
+所有 vSwitch 配置都需要至少两个物理网络适配器捆绑到一个 NIC 组中。ONTAPONTAP Select支持双节点集群使用单个 10Gb 链路。但是， NetApp 的最佳实践是通过 NIC 聚合来确保硬件冗余。
+
+在 vSphere 服务器上，NIC 组是一种聚合结构，用于将多个物理网络适配器捆绑到单个逻辑通道中，从而允许所有成员端口分担网络负载。需要注意的是，NIC 组可以在没有物理交换机支持的情况下创建。负载均衡和故障转移策略可以直接应用于 NIC 组，而 NIC 组无需感知上游交换机的配置。在这种情况下，策略仅适用于出站流量。
+
+
+NOTE: ONTAP Select不支持静态端口通道。分布式 vSwitch 支持启用 LACP 的通道，但使用 LACP LAG 可能会导致 LAG 成员之间的负载分配不均匀。
+
+对于单节点集群， ONTAP Deploy 会将ONTAP Select虚拟机配置为使用一个端口组作为外部网络，并使用同一端口组（或可选地使用不同的端口组）作为集群和节点管理流量。对于单节点集群，可以将所需数量的物理端口作为活动适配器添加到外部端口组。
+
+对于多节点集群， ONTAP Deploy 会将每个ONTAP Select虚拟机配置为使用一个或两个端口组用于内部网络，并单独使用一个或两个端口组用于外部网络。集群和节点管理流量可以与外部流量使用同一个端口组，也可以选择使用单独的端口组。集群和节点管理流量不能与内部流量共享同一个端口组。
+
+
+NOTE: ONTAP Select最多支持四个 VMNIC。
+
+
+
+== 标准或分布式 vSwitch 和每个节点四个物理端口
+
+多节点集群中的每个节点可以分配四个端口组。每个端口组都有一个活动物理端口和三个备用物理端口，如下图所示。
+
+*每个节点具有四个物理端口的 vSwitch*
+
+image:DDN_08.jpg["每个节点有四个物理端口的 vSwitch"]
+
+备用列表中端口的顺序很重要。下表提供了四个端口组中物理端口分布的示例。
+
+*网络最低配置和推荐配置*
+
+[cols="5*"]
+|===
+| 港口集团 | 外部 1 | 外部 2 | 内部 1 | 内部 2 
+
+
+| 活动 | vmnic0 | vmnic1 | vmnic2 | vmnic3 
+
+
+| 待机 1 | vmnic1 | vmnic0 | vmnic3 | vmnic2 
+
+
+| 待机 2 | vmnic2 | vmnic3 | vmnic0 | vmnic1 
+
+
+| 待机 3 | vmnic3 | vmnic2 | vmnic1 | vmnic0 
+|===
+下图显示了 vCenter UI 中外部网络端口组的配置（ONTAP-External 和ONTAP-External2）。请注意，活动适配器来自不同的网卡。在此设置中，vmnic 4 和 vmnic 5 是同一物理网卡上的双端口，而 vmnic 6 和 vminc 7 同样是单独网卡上的双端口（本例中未使用 vnmics 0 至 3）。备用适配器的顺序提供了分层故障转移，其中来自内部网络的端口位于最后。备用列表中的内部端口顺序在两个外部端口组之间进行类似交换。
+
+*第 1 部分： ONTAP Select外部端口组配置*
+
+image:DDN_09.jpg["第 1 部分： ONTAP Select外部端口组配置"]
+
+*第 2 部分： ONTAP Select外部端口组配置*
+
+image:DDN_10.jpg["第 2 部分： ONTAP Select外部端口组配置"]
+
+为了便于阅读，任务分配如下：
+
+[cols="2*"]
+|===
+| ONTAP- 外部 | ONTAP外部 2 
+
+
+| 活动适配器：vmnic5 备用适配器：vmnic7、vmnic4、vmnic6 | 活动适配器：vmnic7 备用适配器：vmnic5、vmnic6、vmnic4 
+|===
+下图显示了内部网络端口组（ONTAP-Internal 和ONTAP-Internal2）的配置。请注意，活动适配器来自不同的网卡。在此设置中，vmnic 4 和 vmnic 5 是同一物理 ASIC 上的双端口，而 vmnic 6 和 vmnic 7 同样是单独 ASIC 上的双端口。备用适配器的顺序提供了分层故障转移，来自外部网络的端口位于最后。备用列表中外部端口的顺序在两个内部端口组之间进行类似交换。
+
+*第 1 部分： ONTAP Select内部端口组配置*
+
+image:DDN_11.jpg["第 1 部分： ONTAP Select内部端口组配置"]
+
+*第 2 部分： ONTAP Select内部端口组*
+
+image:DDN_12.jpg["第 2 部分： ONTAP Select内部端口组"]
+
+为了便于阅读，任务分配如下：
+
+[cols="2*"]
+|===
+| ONTAP- 内部 | ONTAP内部 2 
+
+
+| 活动适配器：vmnic4 备用适配器：vmnic6、vmnic5、vmnic7 | 活动适配器：vmnic6 备用适配器：vmnic4、vmnic7、vmnic5 
+|===
+
+
+== 标准或分布式 vSwitch 和每个节点两个物理端口
+
+使用两个高速 (25/40 Gb) 网卡时，建议的端口组配置在概念上与使用四个 10 Gb 适配器的配置非常相似。即使仅使用两个物理适配器，也应使用四个端口组。端口组分配如下：
+
+[cols="5*"]
+|===
+| 港口集团 | 外部 1（e0a、e0b） | 内部 1（e0c、e0e） | 内部 2（e0d、e0f） | 外部 2（e0g） 
+
+
+| 活动 | vmnic0 | vmnic0 | vmnic1 | vmnic1 
+
+
+| 备用 | vmnic1 | vmnic1 | vmnic0 | vmnic0 
+|===
+*每个节点配备两个高速 (25/40Gb) 物理端口的 vSwitch*
+
+image:DDN_17.jpg["每个节点具有两个高速 (25/40Gb) 物理端口的 vSwitch"]
+
+使用两个物理端口（10 Gb 或更小）时，每个端口组应配置一个活动适配器和一个备用适配器，且两个适配器的端口方向相反。内部网络仅适用于多节点ONTAP Select集群。对于单节点集群，两个适配器都可以在外部端口组中配置为活动状态。
+
+以下示例展示了一个 vSwitch 的配置以及两个端口组，这两个端口组负责处理多节点ONTAP Select集群的内部和外部通信服务。由于内部网络 VMNIC 属于此端口组，并且配置为待机模式，因此在发生网络中断时，外部网络可以使用内部网络 VMNIC。外部网络的情况则相反。在两个端口组之间交替使用活动和待机 VMNIC 对于ONTAP Select虚拟机在网络中断期间正确进行故障转移至关重要。
+
+*每个节点具有两个物理端口（10Gb 或更少）的 vSwitch*
+
+image:DDN_13.jpg["每个节点有两个物理端口的 vSwitch"]
+
+
+
+== 具有 LACP 的分布式 vSwitch
+
+在配置中使用分布式 vSwitch 时，可以使用 LACP（尽管这并非最佳实践）来简化网络配置。唯一受支持的 LACP 配置要求所有 VMNIC 位于单个 LAG 中。上行链路物理交换机必须在通道中的所有端口上支持 7,500 到 9,000 之间的 MTU 大小。内部和外部ONTAP Select网络应在端口组级别隔离。内部网络应使用不可路由（隔离）的 VLAN。外部网络可以使用 VST、EST 或 VGT。
+
+以下示例显示了使用 LACP 的分布式 vSwitch 配置。
+
+*使用 LACP 时的 LAG 属性*
+
+image:DDN_14.jpg["使用 LACP 时的 LAG 属性"]
+
+*使用启用了 LACP 的分布式 vSwitch 的外部端口组配置*
+
+image:DDN_15.jpg["使用启用了 LACP 的分布式 vSwitch 的外部端口组配置"]
+
+*使用启用 LACP 的分布式 vSwitch 的内部端口组配置*
+
+image:DDN_16.jpg["使用启用 LACP 的分布式 vSwitch 的内部端口组配置"]
+
+
+NOTE: LACP 要求您将上游交换机端口配置为端口通道。在分布式 vSwitch 上启用此功能之前，请确保已正确配置启用 LACP 的端口通道。

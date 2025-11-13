@@ -1,0 +1,84 @@
+---
+sidebar: sidebar 
+permalink: task_cli_clusters.html 
+keywords: administer, administering, cli, clusters 
+summary: 您可以执行多项相关任务来管理ONTAP Select集群。 
+---
+= 使用 CLI 管理ONTAP Select集群
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以使用 CLI 执行几个相关任务来管理ONTAP Select集群。
+
+
+
+== 备份ONTAP Select Deploy 配置数据
+
+例如，在部署集群后，备份ONTAP Select Deploy 配置数据。数据将保存到一个加密文件中，您可以将其下载到本地工作站。
+
+您创建的备份文件会保存所有配置数据。这些数据描述了部署环境的各个方面，包括ONTAP Select集群。
+
+.开始之前
+确保 Deploy 在备份操作期间没有执行任何其他任务。
+
+.步骤
+. 使用管理员帐户通过 SSHSign in到ONTAP Select Deploy 实用程序 CLI。
+. 创建ONTAP Select Deploy 配置数据的备份，该数据存储在ONTAP Select Deploy 服务器的内部目录中：
++
+[source, cli]
+----
+deploy backup create
+----
+. 出现提示时，请提供备份密码。
++
+备份文件根据密码加密。
+
+. 显示系统中可用的备份：
++
+[source, cli]
+----
+deploy backup show -detailed
+----
+. 根据“*创建*”字段中的日期选择您的备份文件并记录“*下载 URL*”值。
++
+您可以通过 URL 访问备份文件。
+
+. 使用 Web 浏览器或实用程序（例如 Curl），通过 URL 将备份文件下载到本地工作站。
+
+
+
+
+== 删除ONTAP Select集群
+
+当不再需要ONTAP Select集群时，您可以删除它。
+
+.开始之前
+集群必须处于离线状态。
+
+.步骤
+. 使用管理员帐户Sign in到部署虚拟机 CLI。
+. 显示集群状态：
++
+[source, cli]
+----
+cluster show -name <cluster_name>
+----
+. 如果集群未离线，则将其置于离线状态：
++
+[source, cli]
+----
+cluster offline -name <cluster_name>
+----
+. 确认集群处于离线状态后，删除该集群：
++
+[source, cli]
+----
+cluster delete -name <cluster_name>
+----
+

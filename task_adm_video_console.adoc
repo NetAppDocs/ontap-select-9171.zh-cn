@@ -1,0 +1,26 @@
+---
+sidebar: sidebar 
+permalink: task_adm_video_console.html 
+keywords: administer, administering, web, video console 
+summary: 您可以访问正在运行ONTAP Select 的ESXi 虚拟机的视频控制台。 
+---
+= 访问ONTAP Select视频控制台
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以访问正在运行ONTAP Select 的虚拟机管理程序虚拟机的视频控制台。
+
+.关于此任务
+您可能需要访问虚拟机控制台来解决问题，或者在NetApp支持人员要求您这样做时这样做。
+
+.步骤
+. 访问 vSphere 客户端并登录。
+. 导航到层次结构中的相应位置以找到ONTAP Select虚拟机。
+. 右键单击虚拟机并选择*打开控制台*。
+

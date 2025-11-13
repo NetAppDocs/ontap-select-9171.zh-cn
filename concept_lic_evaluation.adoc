@@ -1,0 +1,70 @@
+---
+sidebar: sidebar 
+permalink: concept_lic_evaluation.html 
+keywords: license, licensing, evaluation, upgrade license 
+summary: 如果您想在决定购买之前评估ONTAP Select ，可以使用评估许可证。评估许可证包含在ONTAP Select Deploy 管理实用程序中，并会在评估部署过程中自动应用于每个ONTAP Select节点。 
+---
+= ONTAP Select部署的评估许可证
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+您可以使用评估许可证或购买的许可证来部署ONTAP Select 。您选择的许可证必须应用于ONTAP Select集群中的每个节点，因此也适用于整个集群。如果您想在决定购买之前评估ONTAP Select ，可以使用评估许可证。评估许可证包含在ONTAP Select Deploy 管理实用程序中，并会在评估部署过程中自动应用于每个ONTAP Select节点。
+
+[NOTE]
+====
+要下载ONTAP Select Deploy 管理实用程序，您需要以下内容：
+
+* 已注册的NetApp支持站点帐户。如果您没有帐户，请参阅 https://mysupport.netapp.com/site/user/registration["用户注册"^]。
+* 到 https://mysupport.netapp.com/site/downloads/evaluation/ontap-select["接受最终用户许可协议"^]适用于具有评估许可证的ONTAP Select部署。
+
+
+====
+部署和支持评估集群时需要考虑以下几点：
+
+* 您只能将该集群用于评估目的。您不得在生产环境中使用具有评估许可证的集群。
+* 配置每个主机时，您应该按如下方式使用ONTAP Select Deploy 管理实用程序：
++
+** 不提供序列号
+** 配置使用评估许可证
+
+
+
+
+
+
+== 许可特征
+
+ONTAP Select评估许可证具有以下特点：
+
+* 不需要具有存储容量的生产许可证
+* 节点序列号为 20 位数字，由ONTAP Select Deploy 自动生成
++
+（您不能直接从NetApp获取它）
+
+* 许可证提供的评估期最长可达 90 天
+* 每个节点分配的最大存储与生产许可证相同
+
+
+
+
+== 升级到生产许可证
+
+您可以将ONTAP Select评估集群升级为使用生产许可证。请注意以下限制：
+
+* 您必须使用 Deploy 管理实用程序来执行许可证升级
+* 您可以使用容量层许可证，但不支持容量池许可
+* 根据集群规模，每个节点必须分配足够的存储空间，以支持生产许可证所需的最低要求
+
+
+看link:task_adm_licenses.html["将评估许可证转换为生产许可证"]了解更多信息。
+
+.相关信息
+* link:concept_lic_production.html["了解生产部署的许可证"]
+* link:deploy-evaluation-ontap-select-ovf-template.html["部署ONTAP Select集群的 90 天评估实例"]
+

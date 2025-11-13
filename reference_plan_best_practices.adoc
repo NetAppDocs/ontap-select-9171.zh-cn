@@ -1,0 +1,182 @@
+---
+sidebar: sidebar 
+permalink: reference_plan_best_practices.html 
+keywords: plan, planning, best practices, recommendations 
+summary: 在规划ONTAP Select部署时，您应该考虑一些最佳实践。 
+---
+= ONTAP Select部署最佳实践摘要
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+在规划ONTAP Select部署时，您应该考虑一些最佳实践。
+
+
+
+== 存储
+
+您应该考虑以下最佳存储做法。
+
+
+
+=== 全闪存或通用闪存阵列
+
+使用全闪存 VSAN 或通用闪存阵列的ONTAP Select虚拟 NAS (vNAS) 部署应遵循具有非 SSD DAS 存储的ONTAP Select的最佳实践。
+
+
+
+=== 外部存储
+
+您应该遵循以下建议：
+
+* 为ONTAP Select网络和外部存储定义专用网络端口、带宽和 vSwitch 配置
+* 配置容量选项以限制存储利用率（ONTAP Select不能消耗外部存储池的全部容量）
+* 验证所有外部存储阵列是否尽可能使用可用的冗余和 HA 功能
+
+
+
+
+=== 虚拟机管理程序核心硬件
+
+单个ONTAP Select聚合中的所有驱动器应为同一类型。例如，不应在同一个聚合中混用 HDD 驱动器和 SSD 驱动器。
+
+
+
+=== RAID 控制器
+
+服务器 RAID 控制器应配置为以写回模式运行。如果发现写入工作负载性能问题，请检查控制器设置并确保未启用 writethrough 或 writearound。
+
+如果物理服务器包含一个管理所有本地连接磁盘的 RAID 控制器， NetApp建议为服务器操作系统创建一个单独的 LUN，并为ONTAP Select创建一个或多个 LUN。如果启动磁盘损坏，此最佳实践允许管理员重新创建操作系统 LUN，而不会影响ONTAP Select。
+
+RAID 控制器缓存用于存储所有传入的块更改，而不仅仅是那些针对NVRAM分区的更改。因此，选择 RAID 控制器时，请选择具有最大可用缓存的控制器。较大的缓存可以降低磁盘刷新频率，并提高ONTAP Select虚拟机、虚拟机管理程序以及服务器上共置的任何计算虚拟机的性能。
+
+
+
+=== RAID 组
+
+最佳 RAID 组大小为 8 到 12 个驱动器。每个 RAID 组的最大驱动器数量为 24 个。
+
+每个ONTAP Select节点支持的 NVME 驱动器最大数量为 14 个。
+
+备用磁盘是可选的，但建议使用。NetApp还建议每个 RAID 组使用一个备用磁盘；不过，所有 RAID 组都可以使用全局备用磁盘。例如，每三个 RAID 组可以使用两个备用磁盘，每个 RAID 组包含 8 到 12 个驱动器。
+
+ONTAP Select不会通过增加 RAID 组中的 LUN 数量来获得性能提升。仅应在遵循 SATA/NL-SAS 配置的最佳实践或绕过虚拟机管理程序文件系统限制时使用多个 LUN。
+
+
+
+=== VMware ESXi 主机
+
+NetApp建议使用 ESX 6.5 U2 或更高版本以及 NVMe 磁盘作为托管系统磁盘的数据存储。此配置可为NVRAM分区提供最佳性能。
+
+
+NOTE: 在 ESX 6.5 U2 及更高版本上安装时，无论系统磁盘位于 SSD 还是 NVMe 磁盘上， ONTAP Select都会使用 vNVMEe 驱动程序。这会将虚拟机硬件级别设置为 13，与 ESX 6.5 及更高版本兼容。
+
+为ONTAP Select网络和外部存储（使用 iSCSI 或 NFS 时为 VMware vSAN 和通用存储阵列流量）定义专用网络端口、带宽和 vSwitch 配置。
+
+配置容量选项以限制存储利用率（ONTAP Select不能消耗外部 vNAS 数据存储的全部容量）。
+
+确保所有通用外部存储阵列尽可能使用可用的冗余和 HA 功能。
+
+
+
+=== VMware Storage vMotion
+
+在决定是否将 VMware Storage vMotion 与ONTAP Select节点结合使用时，新主机上的可用容量并非唯一因素。底层存储类型、主机配置和网络功能应能够承受与原始主机相同的工作负载。
+
+
+
+== 网络连接
+
+您应该考虑以下网络最佳实践。
+
+
+
+=== 重复的 MAC 地址
+
+为了消除多个 Deploy 实例分配重复 MAC 地址的可能性，每个第 2 层网络应使用一个 Deploy 实例来创建或管理ONTAP Select集群或节点。
+
+
+
+=== EMS 消息
+
+应仔细监控ONTAP Select双节点集群中是否存在指示存储故障转移已禁用的 EMS 消息。这些消息表明与调解器服务的连接已断开，应立即纠正。
+
+
+
+=== 节点之间的延迟
+
+两个节点之间的网络必须支持 5 毫秒的平均延迟以及额外的 5 毫秒周期性抖动。部署集群之前，请按照ONTAP Select产品架构和最佳实践技术报告中所述的步骤测试网络。
+
+
+
+=== 负载均衡
+
+要优化内部和外部ONTAP Select网络之间的负载平衡，请使用基于源虚拟端口的路由负载平衡策略。
+
+
+
+=== 多个二层网络
+
+如果数据流量跨越多个第 2 层网络并且需要使用 VLAN 端口，或者当您使用多个 IP 空间时，应使用 VGT。
+
+
+
+=== 物理交换机配置
+
+VMware 建议将连接到 ESXi 主机的交换机端口上的 STP 设置为 Portfast。如果未将交换机端口上的 STP 设置为 Portfast，则会影响ONTAP Select容忍上行链路故障的能力。使用 LACP 时，LACP 计时器应设置为快速（1 秒）。端口组上的负载均衡策略应设置为“基于 IP 哈希的路由”，LAG 上的负载均衡策略应设置为“基于源和目标 IP 地址以及 TCP/UDP 端口和 VLAN”。
+
+
+
+=== KVM 的虚拟交换机选项
+
+您必须在每个ONTAP Select主机上配置一个虚拟交换机，以支持外部网络和内部网络（仅限多节点集群）。在部署多节点集群的过程中，您应该测试内部集群网络上的网络连接。
+
+要了解有关如何在虚拟机管理程序主机上配置 Open vSwitch 的更多信息，请参阅link:https://www.netapp.com/media/13134-tr4613.pdf["ONTAP Select on KVM 产品架构和最佳实践"^]技术报告。
+
+
+
+== HA
+
+您应该考虑以下高可用性最佳实践。
+
+
+
+=== 部署备份
+
+定期备份 Deploy 配置数据（包括创建集群后）是最佳实践。这对于双节点集群尤为重要，因为备份中包含了中介器配置数据。
+
+创建或部署集群后，您应该link:task_cli_clusters.html["备份ONTAP Select Deploy 配置数据"]。
+
+
+
+=== 镜像聚合
+
+虽然需要镜像聚合来提供主聚合的最新 (RPO 0) 副本，但请注意不要让主聚合的可用空间不足。主聚合中的低空间情况可能会导致ONTAP删除用作存储恢复基准的通用 Snapshot 副本。此操作旨在适应客户端写入。但是，由于故障恢复时缺少通用 Snapshot 副本，因此ONTAP Select节点需要从镜像聚合执行完整的基准。在无共享环境中，此操作可能需要大量时间。
+
+
+NOTE: NetApp建议您为镜像聚合保留至少 20% 的可用空间，以实现最佳存储性能和可用性。虽然建议非镜像聚合保留 10% 的可用空间，但文件系统可以使用这额外的 10% 空间来吸收增量更改。由于 ONTAP 采用基于写时复制快照的架构，增量更改会增加镜像聚合的空间利用率。不遵循这些最佳实践可能会对性能产生负面影响。仅当数据聚合配置为镜像聚合时，才支持高可用性接管。
+
+
+
+=== NIC 聚合、组合和故障转移
+
+ONTAP Select支持双节点集群的单个 10Gb 链路；但是， NetApp 的最佳实践是在ONTAP Select集群的内部和外部网络上通过 NIC 聚合或 NIC 组合实现硬件冗余。
+
+如果网卡有多个ASIC（Application Specific Integrated Circuit），通过NIC Teaming组建内外网网络时，需要从每个ASIC中选择一个网口。
+
+NetApp建议在 ESX 和物理交换机上均启用 LACP 模式。此外，应将物理交换机、端口、端口通道接口以及 VMNIC 上的 LACP 计时器设置为“快速”（1 秒）。
+
+当使用具有 LACP 的分布式 vSwitch 时， NetApp建议您将负载平衡策略配置为基于端口组上的 IP 哈希、源和目标 IP 地址、TCP/UDP 端口以及 LAG 上的 VLAN 进行路由。
+
+
+
+=== 双节点扩展 HA (MetroCluster SDS) 最佳实践
+
+在创建MetroCluster SDS 之前，请使用ONTAP Deploy 连接检查器确保两个数据中心之间的网络延迟在可接受范围内。
+
+使用虚拟客户机标记 (VGT) 和双节点集群时，需要注意一点。在双节点集群配置中，节点管理 IP 地址用于在ONTAP完全可用之前与中介器建立早期连接。因此，映射到节点管理 LIF（端口 e0a）的端口组仅支持外部交换机标记 (EST) 和虚拟交换机标记 (VST)。此外，如果管理和数据流量使用同一端口组，则整个双节点集群仅支持 EST 和 VST。
