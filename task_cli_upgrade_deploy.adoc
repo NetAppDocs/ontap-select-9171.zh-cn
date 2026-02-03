@@ -1,34 +1,43 @@
-= 步骤 1：下载升级包
+---
+sidebar: sidebar 
+permalink: task_cli_upgrade_deploy.html 
+keywords: administer, administering, cli, deploy, upgrade deploy 
+summary: 您可以使用命令行界面就地升级现有 Deploy 实用程序虚拟机。 
+---
+= 升级 ONTAP Select Deploy 实例
+:hardbreaks:
 :allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
 
-
-sidebar: sidebar permalink: task_cli_upgrade_deploy.html keywords: administer, administering, cli, deploy, upgrade deploy summary: 您可以使用命令行界面就地升级现有的 Deploy utility 虚拟机。--- = 升级 ONTAP Select Deploy 实例 :hardbreaks: :nofooter: :icons: font :linkattrs: :imagesdir: ./media/
 
 [role="lead"]
-使用 ONTAP Select Deploy 实用程序 CLI 就地升级现有 ONTAP Select Deploy 实用程序虚拟机。
+您可以使用 ONTAP Select Deploy 实用程序 CLI 就地升级现有的 ONTAP Select Deploy 实用程序虚拟机。
 
 .开始之前
-验证 ONTAP Select Deploy 在升级期间未用于执行任何其他任务。有关升级 ONTAP Select Deploy 实用程序的信息和限制，请参阅 link:reference_release_notes.html["发行说明"]。
+确保 ONTAP Select Deploy 不用于在升级期间执行任何其他任务。有关升级 ONTAP Select Deploy 实用程序的信息和限制，请参阅当前版本说明。
 
 [NOTE]
 ====
 如果您安装了ONTAP Select Deploy 管理实用程序的旧实例，则应升级到当前版本。ONTAPONTAP Select节点和ONTAP Select Deploy 组件将单独升级。看link:concept_adm_upgrading_nodes.html["升级ONTAP Select节点"^]更多详情请见下文。
 
-您可以直接从 ONTAP Select Deploy 9.17.1 或 9.16.1 升级到 ONTAP Select Deploy 9.18.1。要从 ONTAP Select Deploy 9.15.1 或更早版本升级，请查看 ONTAP Select 版本的发行说明。
+您可以直接从 ONTAP Select Deploy 9.16.1 或 9.15.1 升级到 ONTAP Select Deploy 9.17.1。要从 ONTAP Select Deploy 9.14.1 或更早版本升级，请查看 ONTAP Select 版本的发行说明。
 
 ====
 
 
-== 步骤 1：下载升级包
+== 步骤 1：下载软件包
 
-要开始升级过程，请从 NetApp 支持站点下载 ONTAP Select Deploy 升级文件。升级包的格式为单个压缩文件。
+要开始升级过程，请从 link:https://mysupport.netapp.com/site/["NetApp 支持站点"^] 下载相应的 ONTAP Select Deploy 虚拟机升级文件。升级包格式化为单个压缩文件。
 
 .步骤
-. 访问 link:https://mysupport.netapp.com/site/downloads/["NetApp 支持站点下载"^] 页面。
-. 向下滚动并选择 *ONTAP Select Deploy*。
-. 选择所需的 ONTAP Select 版本。
+. 使用 Web 浏览器访问 link:https://mysupport.netapp.com/site/["NetApp 支持站点"^]，然后从下载菜单中选择 *Downloads*。
+. 向下滚动并选择 *ONTAP Select Deploy Upgrade*。
+. 选择升级软件包的所需版本。
 . 查看最终用户许可协议 (EULA) 并选择*接受并继续*。
-. 选择并下载相应的 *ONTAP Select Deploy Upgrade* 软件包。根据需要回复所有提示。
+. 选择并下载相应的软件包，根据您的环境需要响应所有提示。
 
 
 
