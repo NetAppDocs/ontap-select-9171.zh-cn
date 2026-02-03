@@ -25,14 +25,14 @@ CAUTION: 您无法使用 Deploy 管理实用程序来升级现有的ONTAP Select
 
 从高层次来看，您应该使用以下步骤来升级现有的ONTAP Select节点。
 
-. 导航至NetApp支持站点的下载页面。
+.步骤
+. 访问 link:https://mysupport.netapp.com/site/downloads/["NetApp 支持站点下载"^] 页面。
+. 向下滚动并选择 *ONTAP Select Image*。
+. 选择所需的安装映像版本。
+. 查看最终用户许可协议 (EULA) 并选择*接受并继续*。
+. 选择并下载相应的 *ONTAP Select Image Upgrade* 软件包。根据需要回复所有提示。
 +
-https://mysupport.netapp.com/site/downloads["NetApp支持下载"^]
-
-. 单击“ONTAP Select Node Upgrade”。
-. 根据需要选择并下载响应所有提示的适当的升级映像。
-+
-在升级ONTAP Select节点之前，请查看发行说明以了解更多信息和任何所需的步骤。
+在升级 ONTAP Select 节点之前，请查看link:reference_release_notes.html["发行说明"]以了解其他信息和任何必需的步骤。
 
 . 使用ONTAP Select升级文件，通过标准ONTAP升级流程升级ONTAP Select节点。有关支持的升级路径的信息，请参阅link:https://docs.netapp.com/us-en/ontap/upgrade/concept_upgrade_paths.html["支持的ONTAP升级路径"^]。
 
