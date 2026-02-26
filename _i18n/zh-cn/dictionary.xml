@@ -498,7 +498,6 @@
   <block id="c57cd85a32e181fb83420d2adb23427d" category="paragraph">每个许可证管理器实例，以及每个相应的 Deploy 实用程序实例，都使用一个唯一的 128 位编号进行标识。此编号与九位数容量池许可证序列号相结合，将池锁定到特定的许可证管理器实例（实际上是一个 Deploy 实例）。您必须在NetApp支持站点生成NetApp许可证文件 (NLF) 时提供这两个值。</block>
   <block id="c35b911ba82c4e39b4517e38d1a88551" category="paragraph">您可以通过以下方式使用 Web 用户界面确定 Deploy 实例的许可证锁定 ID：</block>
   <block id="93147ad40002fa287e2077d09284c452" category="list-text">首次登录 Deploy 时会显示此页面。您也可以点击页面右上角的下拉框并选择“开始使用”来显示此页面。LLID显示在“添加许可证”部分。</block>
-  <block id="f51e8d01c52b31dc2ac35fcbc93eca28" category="list-text">管理 单击页面顶部的“*管理*”选项卡，然后单击“*系统*”和“*设置*”。</block>
   <block id="bc165811908b5de0b53e3fb455b59f7d" category="section-title">基本租赁业务</block>
   <block id="3ccfdfb46d04e07ae1d6fe35a8cbb514" category="paragraph">每次创建、扩展或更改数据聚合时， ONTAP Select节点都必须查找或请求有效的容量租约。可以使用之前请求中获取的仍然有效的租约，也可以根据需要请求新的租约。ONTAPONTAP Select节点执行以下步骤来查找容量池租约：</block>
   <block id="7d9520f0fa2db8b35655f9495b62e220" category="list-text">如果节点上存在现有租约，则只要满足以下所有条件，就会使用该租约：</block>
@@ -1662,27 +1661,6 @@
   <block id="6ead2b5cc2e9a07c3c837cd527eae680" category="open-title">四节点集群中的单个节点</block>
   <block id="0e17d1b8e444a58b17e21b8d633cf3c9" category="paragraph">下图展示了四节点集群中单个ONTAP Select虚拟机的典型网络配置。其中有两个独立的网络： ONTAP内部网络和ONTAP外部网络。</block>
   <block id="ab818ab7a96525155b780ef59003cf8c" category="paragraph"><block ref="ab818ab7a96525155b780ef59003cf8c" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="c3a20bbad365631eadc5b2dca8f640b3" category="section-title">步骤3：配置Open vSwitch</block>
-  <block id="c44b5d59bfc3b0196028c522c56aa989" category="paragraph">vSwitch 是用于支持内部和外部网络连接的核心虚拟机管理程序组件。在配置每个虚拟机管理程序 vSwitch 时，您应该考虑以下几点。</block>
-  <block id="d1beebffe274c5b13d29f2fbfaa10b06" category="paragraph">以下步骤适用于典型网络环境中具有两个物理端口（2x10Gb）的 ESXi 主机的 vSwitch 配置。</block>
-  <block id="720708f411d277d77845e1db4cee83de" category="inline-link-macro">配置 vSwitch 并将两个端口分配给 vSwitch</block>
-  <block id="f07356480e3047e35b4cb99dbcc748e2" category="list-text"><block ref="2076eeb99e46600240fb1d963411bb31" category="inline-link-macro-rx"></block>。</block>
-  <block id="bf87bb05f214f1b9f8546e218338fb13" category="inline-link-macro">使用两个端口创建 NIC 团队</block>
-  <block id="32d6da19d2584fe97eb75d6418af8ca3" category="list-text"><block ref="4d5b30272096305aaf5c4ffdca2a1db5" category="inline-link-macro-rx"></block>。</block>
-  <block id="bfb9321c8431589faff7f47c47138df7" category="list-text">将负载均衡策略设置为“基于原始虚拟端口ID的路由”。</block>
-  <block id="8042c73ffcc0e5ec0c31ae3e4d7b414e" category="list-text">将两个适配器都标记为“活动”或将一个适配器标记为“活动”，将另一个适配器标记为“待机”。</block>
-  <block id="5a9f02bdaab74c00379f1d1e19fe6c57" category="list-text">将“故障回复”设置设为“是”。</block>
-  <block id="0cc1ebaa405436d568cee576cc2d2503" category="inline-image-macro">vSwitch 属性）</block>
-  <block id="f2456bc45004bdf347023d01536a2379" category="paragraph"><block ref="f2456bc45004bdf347023d01536a2379" category="inline-image-macro-rx" type="image"></block></block>
-  <block id="0bd1bd6c1c4f8c07bba0ee34ba53b4b3" category="list-text">配置 vSwitch 以使用巨型帧 (9000 MTU)。</block>
-  <block id="e954024be7362eabbc9a349d62fdd4d4" category="list-text">在 vSwitch 上为内部流量配置端口组 (ONTAP-internal )：</block>
-  <block id="a75b88570c3f7c89c4fc7aa2f4ab0862" category="list-text">该端口组分配给用于集群、HA 互连和镜像流量的ONTAP Select虚拟网络适配器 e0c-e0g。</block>
-  <block id="98a4f6885e7d5c14cf8637949d2c7084" category="list-text">由于此网络预计为私有网络，因此端口组应位于不可路由的 VLAN 上。您应该为端口组添加相应的 VLAN 标记以考虑到这一点。</block>
-  <block id="1d73953b34ca84fbbf679a9071108259" category="list-text">端口组的负载平衡、故障回复和故障转移顺序设置应与 vSwitch 相同。</block>
-  <block id="b7760ca7d6bf308d66b54dafb201dee0" category="list-text">在 vSwitch 上为外部流量配置端口组 (ONTAP-external )：</block>
-  <block id="cc60c471b3f7c93bb39710ddf02f3de5" category="list-text">该端口组分配给用于数据和管理流量的ONTAP Select虚拟网络适配器 e0a-e0c。</block>
-  <block id="9c0cdffd9a10aa81c87d6972a4d9f884" category="list-text">端口组可以位于可路由 VLAN 上。根据网络环境，您还应该添加适当的 VLAN 标记或配置端口组以进行 VLAN 中继。</block>
-  <block id="fae4bee7c370d0d0391b8ef189079d46" category="list-text">端口组的负载平衡、故障回复和故障转移顺序设置应与 vSwitch 相同。</block>
   <block id="9450ade0fc753dddabd4ea63d8bb1187" category="summary">准备部署ONTAP Select节点的每个 KVM 虚拟机管理程序主机。准备主机时，需要仔细评估部署环境，以确保主机已正确配置并准备好支持ONTAP Select集群的部署。</block>
   <block id="6ca9942b969b8c587ad10afd9e0ef119" category="doc">ONTAP Select的 KVM 主机配置和准备清单</block>
   <block id="75b870251dc6cf53eee7c05860c964ad" category="paragraph">准备部署ONTAP Select节点的每个 KVM 虚拟机管理程序主机。准备主机时，需要仔细评估部署环境，以确保主机已正确配置并准备好支持ONTAP Select集群的部署。</block>
@@ -3944,4 +3922,5 @@
   <block id="28258323eaa4732b0beafbc8b083a5ab" category="list-text">如果这是首次 Sign in，并且您没有使用 vCenter 提供的向导安装 Deploy，请在出现提示时提供以下配置信息：</block>
   <block id="0778e2d9c54386153e2e52bad4129abe" category="inline-link-macro">使用 SSH Sign in 到 Deploy</block>
   <block id="ccbbd15600c60abef8f9d734d84b4a4e" category="list-text"><block ref="ccbbd15600c60abef8f9d734d84b4a4e" category="inline-link-macro-rx"></block></block>
+  <block id="111ee35eb26cb3daacf7392b146bf0ea" category="list-text">管理 单击页面顶部的 *管理* 选项卡，然后单击 *系统和 AutoSupport*。</block>
 </blocks>
