@@ -14,7 +14,7 @@ summary: 在规划ONTAP Select部署时，您应该考虑MetroCluster SDS 的几
 
 
 [role="lead"]
-MetroCluster SDS 是创建双节点ONTAP Select集群时的一个配置选项。它类似于远程办公室/分支机构 (ROBO) 部署，但两个节点之间的距离最长可达 10 公里。这种增强型双节点部署提供了更多用例场景。在准备部署MetroCluster SDS 时，您应该了解相关要求和限制。
+MetroCluster SDS 是创建双节点 ONTAP Select 集群时的配置选项。它类似于远程办公室/分支机构 (ROBO) 部署。这种增强的双节点部署提供了其他用例场景。在准备部署 MetroCluster SDS 时，您应该了解这些要求和限制。
 
 在部署MetroCluster SDS 之前，请验证是否满足以下要求。
 
