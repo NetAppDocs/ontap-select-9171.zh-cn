@@ -3226,7 +3226,6 @@
   <block id="a811207ba17996dc78a58667cd177a13" category="inline-link-macro">主办方准备清单</block>
   <block id="3f47eb1c93cfecc035015d51dea43351" category="inline-link-macro">部署实用程序安装</block>
   <block id="650b54030913723e437a2beaa84f5e95" category="inline-link-macro">ONTAP Select安装</block>
-  <block id="2eb8006ba6af294cdeda2a87c467fa5c" category="paragraph">跟随<block ref="98f788baf075ad6e86ad4cdcdcd40ae3" category="inline-link-macro-rx"></block>并审核所需信息<block ref="5f52a4a178eaea2e0c4812fd7a9f2757" category="inline-link-macro-rx"></block>以及<block ref="b3b43e0c3f8f2e7f8b8f596dd2656645" category="inline-link-macro-rx"></block>了解更多信息。</block>
   <block id="9ee25f36a4c63773203c1547efed4fc1" category="paragraph">您必须在创建新的ONTAP Select集群之前执行此过程。您还可以执行此过程为现有软件 RAID NVMe 集群配置额外的 NVMe 驱动器。在这种情况下，配置驱动器后，您必须像添加额外的 SSD 驱动器一样通过 Deploy 添加它们。主要区别在于 Deploy 会检测 NVMe 驱动器并重新启动节点。将 NVMe 驱动器添加到现有集群时，请注意以下有关重新启动过程的事项：</block>
   <block id="fd5c5757c7f7041a2e15ed74c2c32432" category="list-text">部署处理重启编排。</block>
   <block id="668ad5825e6f031e6f06ed116fda245d" category="list-text">HA 接管和交还以有序的方式执行，但重新同步聚合可能非常耗时。</block>
@@ -3927,4 +3926,5 @@
   <block id="1d6a755bc579447fd7ccaf4c366f016d" category="list-text">ONTAP Select Deploy Mediator 和每个 ONTAP Select 节点之间的 125ms RTT 和最小带宽 5Mbps</block>
   <block id="2cc135ee22f21247b52a24a050dc5f69" category="list-text">Premium 或 Premium XL 许可证</block>
   <block id="3712f888ec8c939491ff4fe2129b3d6e" category="paragraph">MetroCluster SDS 是创建双节点 ONTAP Select 集群时的配置选项。它类似于远程办公室/分支机构 (ROBO) 部署。这种增强的双节点部署提供了其他用例场景。在准备部署 MetroCluster SDS 时，您应该了解这些要求和限制。</block>
+  <block id="e16080ba1221020cf277f79a62c290d9" category="paragraph">请按照 <block ref="aa150fc2553a8a0c846847314bde8f61" category="inline-link-macro-rx"></block>，并查看 <block ref="5f52a4a178eaea2e0c4812fd7a9f2757" category="inline-link-macro-rx"></block> 和 <block ref="b3b43e0c3f8f2e7f8b8f596dd2656645" category="inline-link-macro-rx"></block> 所需的信息以了解更多信息。</block>
 </blocks>
