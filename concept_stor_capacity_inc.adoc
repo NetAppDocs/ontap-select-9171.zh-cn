@@ -54,6 +54,7 @@ image:ST_07.jpg["容量分布：节点 1 两次额外存储添加操作后的分
 
 
 
+[[increase-capacity-for-ontap-select-with-software-raid]]
 == 使用软件 RAID 增加ONTAP Select的容量
 
 类似地，存储添加向导也可用于增加使用软件 RAID 的ONTAP Select节点的管理容量。该向导仅显示可用的 DAS SDD 驱动器，这些驱动器可以作为 RDM 映射到ONTAP Select虚拟机。

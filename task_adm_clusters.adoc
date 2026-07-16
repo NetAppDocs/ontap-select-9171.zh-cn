@@ -18,6 +18,7 @@ summary: 您可以执行多项相关任务来管理ONTAP Select集群。
 
 
 
+[[move-an-ontap-select-cluster-offline-and-online]]
 == 将ONTAP Select集群移至离线和在线
 
 创建集群后，您可以根据需要将其移至离线或在线。
@@ -40,6 +41,7 @@ summary: 您可以执行多项相关任务来管理ONTAP Select集群。
 
 
 
+[[delete-an-ontap-select-cluster]]
 == 删除ONTAP Select集群
 
 当不再需要ONTAP Select集群时，您可以删除它。
@@ -59,6 +61,7 @@ summary: 您可以执行多项相关任务来管理ONTAP Select集群。
 
 
 
+[[refresh-the-deploy-cluster-configuration]]
 == 刷新 Deploy 集群配置
 
 创建ONTAP Select集群后，您可以使用ONTAP或虚拟机管理程序管理工具在 Deploy 实用程序之外更改集群或虚拟机配置。虚拟机的配置在迁移后也可能发生变化。

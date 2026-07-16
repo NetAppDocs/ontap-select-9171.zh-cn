@@ -18,12 +18,14 @@ summary: '表述性状态传输 (REST) 是一种用于创建分布式 Web 应用
 
 
 
+[[architecture-and-classic-constraints]]
 == 建筑与经典约束
 
 REST 理论由 Roy Fielding 在其博士论文中正式阐述。 https://www.ics.uci.edu/~fielding/pubs/dissertation/top.htm["论文"] 2000年毕业于加州大学尔湾分校。它通过一系列约束定义了一种架构风格，这些约束共同改进了基于Web的应用程序及其底层协议。这些约束基于客户端/服务器架构，使用无状态通信协议，构建了一个RESTful Web服务应用程序。
 
 
 
+[[resources-and-state-representation]]
 == 资源和国家代表
 
 资源是基于 Web 系统的基本组件。创建 REST Web 服务应用程序时，早期设计任务包括：
@@ -36,12 +38,14 @@ REST 理论由 Roy Fielding 在其博士论文中正式阐述。 https://www.ics
 
 
 
+[[uri-endpoints]]
 == URI 端点
 
 每个 REST 资源都必须使用定义明确的寻址方案进行定义和提供。资源所在和标识的端点使用统一资源标识符 (URI)。URI提供了一个通用框架，用于为网络中的每个资源创建唯一名称。统一资源定位符 (URL) 是一种用于 Web 服务识别和访问资源的 URI。资源通常以类似于文件目录的层级结构公开。
 
 
 
+[[http-messages]]
 == HTTP 消息
 
 超文本传输协议 (HTTP) 是 Web 服务客户端和服务器用来交换资源请求和响应消息的协议。在设计 Web 服务应用程序的过程中，HTTP 动词（例如 GET 和 POST）会被映射到资源及其对应的状态管理操作。
@@ -50,6 +54,7 @@ HTTP 是无状态的。因此，为了将一组相关的请求和响应关联到
 
 
 
+[[json-formatting]]
 == JSON 格式
 
 虽然信息可以通过多种方式在客户端和服务器之间构建和传输，但最流行的选项（以及与部署 REST API 一起使用的选项）是 JavaScript 对象表示法 (JSON)。JSON是一种行业标准，用于以纯文本表示简单数据结构，并用于传输描述资源的状态信息。

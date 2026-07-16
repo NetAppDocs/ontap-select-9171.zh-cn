@@ -21,6 +21,7 @@ CAUTION: 您无法使用 Deploy 管理实用程序来升级现有的ONTAP Select
 
 
 
+[[general-procedure]]
 == 一般程序
 
 从高层次来看，您应该使用以下步骤来升级现有的ONTAP Select节点。
@@ -39,6 +40,7 @@ https://mysupport.netapp.com/site/downloads["NetApp 支持下载"^]
 
 
 
+[[revert-an-ontap-select-node]]
 == 还原ONTAP Select节点
 
 您无法将ONTAP Select节点恢复到其最初安装时的版本之前的版本。例如：
@@ -49,6 +51,7 @@ https://mysupport.netapp.com/site/downloads["NetApp 支持下载"^]
 
 
 
+[[use-the-vmxnet3-network-driver]]
 == 使用 VMXNET3 网络驱动程序
 
 VMXNET3 是 VMware ESXi 上新集群部署附带的默认网络驱动程序。如果您升级运行ONTAP Select 9.4 或更早版本的现有ONTAP Select节点，则网络驱动程序不会自动升级。您必须手动升级到 VMXNET3。请联系NetApp支持以获取升级方面的帮助。

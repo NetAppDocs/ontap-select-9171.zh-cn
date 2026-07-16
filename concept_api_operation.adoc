@@ -18,12 +18,14 @@ summary: 虽然 REST 确立了一套通用的技术和最佳实践，但每个 A
 
 
 
+[[hypervisor-host-versus-ontap-select-node]]
 == 虚拟机管理程序主机与ONTAP Select节点
 
 _虚拟机管理程序主机_是托管ONTAP Select虚拟机的核心硬件平台。当ONTAP Select虚拟机部署在虚拟机管理程序主机上并处于活动状态时，该虚拟机将被视为 ONTAP Select 节点。在 Deploy REST API 版本 3 中，主机对象和节点对象是独立且不同的。这允许一对多关系，其中一个或多个ONTAP Select节点可以在同一虚拟机管理程序主机上运行。
 
 
 
+[[object-identifiers]]
 == 对象标识符
 
 每个资源实例或对象在创建时都会分配一个唯一标识符。这些标识符在ONTAP Select Deploy 的特定实例中是全局唯一的。在发出创建新对象实例的 API 调用后，关联的 id 值将返回给调用者。 `location` HTTP响应头。您可以提取标识符，并在后续调用中引用资源实例时使用它。
@@ -33,12 +35,14 @@ NOTE: 对象标识符的内容和内部结构可能随时更改。在引用关�
 
 
 
+[[request-identifiers]]
 == 请求标识符
 
 每个成功的 API 请求都会被分配一个唯一的标识符。返回的标识符 `request-id`相关HTTP响应的头部。您可以使用请求标识符来统称单个特定 API 请求-响应事务的活动。例如，您可以根据请求 ID 检索事务的所有事件消息。
 
 
 
+[[synchronous-and-asynchronous-calls]]
 == 同步和异步调用
 
 服务器执行从客户端收到的 HTTP 请求主要有两种方式：
@@ -49,6 +53,7 @@ NOTE: 对象标识符的内容和内部结构可能随时更改。在引用关�
 
 
 
+[[confirm-the-completion-of-a-long-running-job]]
 == 确认长期运行作业的完成
 
 通常，任何需要很长时间才能完成的操作都会使用服务器上的后台任务异步处理。使用 Deploy REST API，每个后台任务都由一个 Job 对象固定，该对象跟踪任务并提供信息（例如当前状态）。创建后台任务后，HTTP 响应中会返回一个 Job 对象（包含其唯一标识符）。
@@ -63,6 +68,7 @@ NOTE: 对象标识符的内容和内部结构可能随时更改。在引用关�
 
 
 
+[[security]]
 == 安全性
 
 Deploy API 使用以下安全技术：

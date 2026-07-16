@@ -18,6 +18,7 @@ summary: 示例 Python 脚本可帮助您执行多种不同的任务。在实际
 
 
 
+[[common-design-characteristics]]
 == 常见的设计特征
 
 这些脚本的设计具有以下共同特点：
@@ -30,6 +31,7 @@ summary: 示例 Python 脚本可帮助您执行多种不同的任务。在实际
 
 
 
+[[create-a-cluster]]
 == 创建集群
 
 您可以使用脚本 cluster.py 创建ONTAP Select集群。根据 CLI 参数和 JSON 输入文件的内容，您可以根据部署环境修改该脚本，如下所示：
@@ -49,6 +51,7 @@ summary: 示例 Python 脚本可帮助您执行多种不同的任务。在实际
 
 
 
+[[add-a-node-license]]
 == 添加节点许可证
 
 如果您选择部署生产集群，则必须使用脚本“add_license.py”为每个节点添加许可证。您可以在部署集群之前或之后添加许可证。
@@ -64,6 +67,7 @@ summary: 示例 Python 脚本可帮助您执行多种不同的任务。在实际
 
 
 
+[[delete-a-cluster]]
 == 删除集群
 
 您可以使用脚本 _delete_cluster.py_ 删除现有的ONTAP Select集群。

@@ -18,6 +18,7 @@ summary: 您应考虑与 VMware 环境相关的几个硬件要求和规划问题
 
 
 
+[[hypervisor-requirements]]
 == 虚拟机管理程序要求
 
 运行ONTAP Select 的虚拟机管理程序有几个相关要求。
@@ -27,12 +28,14 @@ NOTE: 你应该复习一下link:reference_release_notes.html["ONTAP Select发行
 
 
 
+[[vmware-licensing]]
 === VMware 许可
 
 要部署ONTAP Select集群，您的组织必须拥有适用于运行ONTAP Select 的虚拟机管理程序主机的有效 VMware vSphere 许可证。您应该使用适合您部署的许可证。
 
 
 
+[[software-compatibility]]
 === 软件兼容性
 
 您可以在 KVM 和 ESXi 虚拟机管理程序上部署ONTAP Select 。
@@ -79,12 +82,14 @@ NOTE: ESXi 6.5 GA 和 ESXi 6.7 GA 已达到可用终止状态。如果您拥有�
 ====
 
 
+[[vmware-vcenter-and-standalone-esxi-hosts]]
 === VMware vCenter 和独立 ESXi 主机
 
 如果 ESXi 虚拟机管理程序主机由 vCenter 服务器管理，则必须使用 vCenter 凭据将该主机注册到 Deploy 管理实用程序。您无法使用 ESXi 凭据将该主机注册为独立主机。
 
 
 
+[[core-hardware-requirements]]
 == 核心硬件要求
 
 部署ONTAP Select 的物理虚拟机管理程序主机必须满足多项硬件要求。您可以选择任何平台作为虚拟机管理程序主机，只要它满足最低硬件要求即可。以下供应商提供支持的硬件平台： Cisco、Dell、HP、Fujitsu、Lenovo 和 Supermicro。
@@ -96,6 +101,7 @@ NOTE: 从ONTAP Select 9.9.1 开始，仅支持基于 Intel Xeon Sandy Bridge 或
 
 
 
+[[basic-hardware-requirements]]
 === 基本硬件要求
 
 无论节点实例类型或许可证提供如何，所有平台都适用一些常见的硬件要求。
@@ -124,6 +130,7 @@ NOTE: ONTAP Select不支持 Advanced Micro Devices (AMD) 处理器。
 |===
 
 
+[[additional-hardware-requirements-based-on-the-instance-type]]
 === 基于实例类型的额外硬件要求
 
 根据节点实例类型，还有一些额外的硬件要求。

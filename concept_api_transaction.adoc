@@ -18,12 +18,14 @@ summary: 每个 Deploy API 调用都会以 HTTP 请求的形式发送到 Deploy 
 
 
 
+[[input-variables-controlling-an-api-request]]
 == 控制 API 请求的输入变量
 
 您可以通过 HTTP 请求中设置的参数来控制如何处理 API 调用。
 
 
 
+[[request-headers]]
 === 请求标头
 
 您必须在 HTTP 请求中包含几个标头，其中包括：
@@ -35,6 +37,7 @@ summary: 每个 Deploy API 调用都会以 HTTP 请求的形式发送到 Deploy 
 
 
 
+[[request-body]]
 === 请求正文
 
 请求主体的内容根据具体调用而有所不同。HTTP请求主体由以下之一组成：
@@ -45,6 +48,7 @@ summary: 每个 Deploy API 调用都会以 HTTP 请求的形式发送到 Deploy 
 
 
 
+[[filter-objects]]
 === 过滤对象
 
 发出使用 GET 的 API 调用时，您可以根据任意属性限制或过滤返回的对象。例如，您可以指定要匹配的精确值：
@@ -85,6 +89,7 @@ summary: 每个 Deploy API 调用都会以 HTTP 请求的形式发送到 Deploy 
 
 
 
+[[selecting-object-fields]]
 === 选择对象字段
 
 默认情况下，使用 GET 发出 API 调用仅返回唯一标识一个或多个对象的属性。这组最小字段将充当每个对象的键，并根据对象类型而有所不同。您可以使用 fields 查询参数通过以下方式选择其他对象属性：
@@ -99,6 +104,7 @@ TIP: 作为最佳实践，您应该始终识别所需的特定字段。您应仅
 
 
 
+[[sort-objects-in-the-output-set]]
 === 对输出集中的对象进行排序
 
 资源集合中的记录将按照对象定义的默认顺序返回。您可以使用 order_by 查询参数，通过指定字段名称和排序方向来更改排序顺序，如下所示：
@@ -111,6 +117,7 @@ TIP: 作为最佳实践，您应该始终识别所需的特定字段。您应仅
 
 
 
+[[pagination]]
 === 分页
 
 使用 GET 方式发出 API 调用来访问相同类型的对象集合时，默认返回所有匹配的对象。如有需要，您可以使用请求中的 max_records 查询参数来限制返回的记录数。例如：
@@ -123,12 +130,14 @@ TIP: 作为最佳实践，您应该始终识别所需的特定字段。您应仅
 
 
 
+[[interpret-an-api-response]]
 == 解释 API 响应
 
 每个 API 请求都会生成一个响应返回给客户端。您可以检查该响应以确定请求是否成功，并根据需要检索其他数据。
 
 
 
+[[http-status-code]]
 === HTTP 状态代码
 
 下面描述了部署 REST API 使用的 HTTP 状态代码。
@@ -169,6 +178,7 @@ TIP: 作为最佳实践，您应该始终识别所需的特定字段。您应仅
 |===
 
 
+[[response-headers]]
 === 响应标头
 
 Deploy 服务器生成的 HTTP 响应中包含几个标头，包括：
@@ -179,6 +189,7 @@ Deploy 服务器生成的 HTTP 响应中包含几个标头，包括：
 
 
 
+[[response-body]]
 === 响应正文
 
 与 API 请求相关的响应内容会根据对象、处理类型以及请求的成功或失败而有所不同。响应主体以 JSON 格式呈现。

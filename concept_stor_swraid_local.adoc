@@ -42,6 +42,7 @@ summary: 软件 RAID 是在ONTAP软件堆栈内实施的 RAID 抽象层。它提
 ====
 
 
+[[software-raid-configuration-for-local-attached-storage]]
 == 本地连接存储的软件 RAID 配置
 
 使用软件 RAID 时，理想情况下没有硬件 RAID 控制器，但是，如果系统确实有现有的 RAID 控制器，则必须遵守以下要求：
@@ -59,6 +60,7 @@ NOTE: 管理员需要跟踪ONTAP Select VM 正在使用的驱动器，并防止�
 
 
 
+[[ontap-select-virtual-and-physical-disks]]
 == ONTAP Select虚拟磁盘和物理磁盘
 
 对于使用硬件 RAID 控制器的配置，物理磁盘冗余由 RAID 控制器提供。ONTAPONTAP Select会提供一个或多个 VMDK， ONTAP管理员可以从中配置数据聚合。这些 VMDK 以 RAID 0 格式进行条带化，因为ONTAP软件 RAID 冗余、低效且低效，这是由于硬件级别提供的弹性造成的。此外，用于系统磁盘的 VMDK 与用于存储用户数据的 VMDK 位于同一数据存储中。
@@ -98,6 +100,7 @@ ONTAP软件 RAID 支持以下 RAID 类型：RAID 4、RAID-DP 和RAID-TEC。这�
 
 
 
+[[passthrough-directpath-io-devices-vs-raw-device-maps-rdms]]
 == 直通 (DirectPath IO) 设备与原始设备映射 (RDM)
 
 ESX 和 KVM 虚拟机管理程序不支持将 NVMe 磁盘用作原始设备映射 (RDM)。要允许ONTAP Select直接控制 NVMe 磁盘，您必须在 ESX 或 KVM 中将这些驱动器配置为直通设备。将 NVMe 设备配置为直通设备时，需要服务器 BIOS 支持，并且可能需要重新启动主机。此外，每个主机可分配的直通设备数量存在限制，具体数量可能因平台而异。但是， ONTAP Deploy 将此限制为每个ONTAP Select节点 14 个 NVMe 设备。这意味着 NVMe 配置以牺牲总容量为代价，提供了非常高的 IOP 密度 (IOPs/TB)。或者，如果您需要具有更大存储容量的高性能配置，建议的配置是：较大的ONTAP Select VM 大小、用于系统磁盘的 INTEL Optane 卡以及用于数据存储的一定数量的 SSD 驱动器。
@@ -109,6 +112,7 @@ NOTE: 为了充分利用 NVMe 性能，请考虑较大的ONTAP Select VM 大小�
 
 
 
+[[physical-and-virtual-disk-provisioning]]
 == 物理和虚拟磁盘配置
 
 为了提供更简化的用户体验， ONTAP Deploy 会自动从指定的数据存储库（物理系统磁盘）配置系统（虚拟）磁盘，并将其连接到ONTAP Select虚拟机。此操作会在初始设置期间自动执行，以便ONTAP Select虚拟机能够启动。RDM会进行分区，并且会自动构建根聚合。如果ONTAP Select节点属于 HA 对，则数据分区会自动分配给本地存储池和镜像存储池。此分配操作会在集群创建操作和存储添加操作期间自动进行。
@@ -124,6 +128,7 @@ NOTE: 根聚合的 RAID 组类型取决于可用的磁盘数量。ONTAPONTAP会�
 
 
 
+[[match-an-ontap-select-disk-to-the-corresponding-esx-or-kvm-disk]]
 == 将ONTAP Select磁盘与相应的 ESX 或 KVM 磁盘匹配
 
 ONTAP Select磁盘通常标记为 NET xy您可以使用以下ONTAP命令获取磁盘 UUID：
@@ -165,6 +170,7 @@ cat /sys/block/<block_device_id>/device/wwid
 ====
 
 
+[[multiple-drive-failures-when-using-software-raid]]
 == 使用软件 RAID 时出现多个驱动器故障
 
 系统可能会遇到多个驱动器同时处于故障状态的情况。系统的行为取决于聚合 RAID 保护和故障驱动器的数量。
@@ -244,6 +250,7 @@ disk show -broken
 ====
 
 
+[[virtualized-nvram]]
 == 虚拟化NVRAM
 
 NetApp FAS系统传统上配备物理NVRAM PCI 卡。该卡是一款高性能卡，包含非易失性闪存，可显著提升写入性能。它通过授予ONTAP立即向客户端确认传入写入的能力来实现这一点。它还可以安排将已修改的数据块移回速度较慢的存储介质，这个过程称为“降级暂存”。

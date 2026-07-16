@@ -35,6 +35,7 @@ ESXi 和 KVM 主机不支持以下集群扩展和收缩：
 
 
 
+[[hardware-and-storage-considerations]]
 == 硬件和存储注意事项
 
 以下 KVM 和 ESXi 虚拟机管理程序主机支持集群扩展和收缩功能。
@@ -80,6 +81,7 @@ RHEL 10.1 和 10.0 以及 Rocky Linux 10.0 主机上的 KVM 虚拟机管理程�
 ====
 
 
+[[expand-the-cluster]]
 == 扩展集群
 
 使用集群扩展功能来增加现有 ESXi 或 KVM 集群的大小。
@@ -145,6 +147,7 @@ link:task_cli_clusters.html["备份ONTAP Select Deploy 配置数据"]。
 
 
 
+[[contract-the-cluster]]
 == 收缩集群
 
 使用集群收缩功能来减少现有 ESXi 或 KVM 集群的大小。

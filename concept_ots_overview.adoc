@@ -26,6 +26,7 @@ SnapMirror软件支持您在混合云的ONTAP存储之间移动数据，以便�
 
 
 
+[[software-defined-storage]]
 == 软件定义存储
 
 通过软件实施和交付 IT 服务，管理员能够以前所未有的速度和敏捷性快速配置资源。随着现代数据中心转向软件定义基础设施 (SDI) 架构，您可以将最有价值的 IT 资产与底层物理基础设施分离，从而提供灵活性、可扩展性和可编程性。
@@ -36,18 +37,21 @@ ONTAP Select是NetApp面向 SDS 市场的解决方案。ONTAPONTAP Select为软�
 
 
 
+[[two-software-components]]
 == 两个软件组件
 
 ONTAP Select由两个主要软件组件组成：
 
 
 
+[[ontap-select-node]]
 === ONTAP Select节点
 
 ONTAP Select集群由一个、两个、四个、六个或八个节点组成。每个集群节点都部署为单独的虚拟机，并运行专门设计的ONTAP 9 软件版本。
 
 
 
+[[ontap-select-deploy-administration-utility]]
 === ONTAP Select Deploy 管理实用程序
 
 Deploy 管理实用程序打包并安装为单独的 Linux 虚拟机。您必须使用该实用程序在生产环境中部署ONTAP Select集群。最新版本的ONTAP Select节点映像与 Deploy 实用程序捆绑在一起。
@@ -57,6 +61,7 @@ NOTE: Deploy 管理实用程序未分配单独的版本号。Deploy的版本号�
 
 
 
+[[illustration-of-a-typical-deployment]]
 == 典型部署的图示
 
 下图展示了如何使用NetApp ONTAP Select Deploy 管理实用程序来部署和支持四节点ONTAP Select集群。Deploy实用程序和ONTAP Select节点在专用虚拟机管理程序主机上作为单独的虚拟机运行。
@@ -65,30 +70,35 @@ image:ots_architecture.png["展示使用 Deploy 管理实用程序创建的ONTAP
 
 
 
+[[compare-ontap-select-and-ontap-9]]
 == 比较ONTAP Select和ONTAP 9
 
 基于硬件的ONTAP和ONTAP Select均提供企业级存储解决方案。然而，由于它们的设计和实施方式不同，因此各自可以满足不同的业务需求和使用场景。在规划ONTAP Select部署之前，您应该熟悉这两个平台之间的主要区别。
 
 
 
+[[different-ha-architecture]]
 === 不同的 HA 架构
 
 根据您在集群中定义的节点数， ONTAP Select提供 HA 功能。例如，一个四节点集群由两个 HA 对组成。ONTAP Select使用的 HA 架构基于非共享存储模型。也就是说，HA 对中的一个节点无法直接访问另一个节点拥有的存储。这种设计可能会影响ONTAP Select 的某些运行特性。
 
 
 
+[[capacity-licensing]]
 === 容量许可
 
 ONTAP Select引入了基于消费的许可模式。在生产环境中部署ONTAP Select集群时，您必须为每个节点或共享容量池购买一个包含存储容量的许可证。您必须使用 Deploy 实用程序应用用于确定集群节点存储容量的许可证文件。
 
 
 
+[[ontap-feature-licensing]]
 === ONTAP功能许可
 
 ONTAP Select集群中的每个节点都会自动获得使用多项ONTAP功能的许可。您无需手动安装或应用这些功能许可证。
 
 
 
+[[ontap-features-not-supported-in-ontap-select]]
 === ONTAP Select不支持的ONTAP功能
 
 ONTAP Select不支持多项ONTAP功能。大多数情况下，这些功能需要虚拟化ONTAP Select环境中不提供的特殊硬件。

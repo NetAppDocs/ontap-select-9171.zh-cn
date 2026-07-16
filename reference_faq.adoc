@@ -23,6 +23,7 @@ summary: 查找有关ONTAP Select 的常见问题的答案。
 ====
 
 
+[[general]]
 == 常规
 
 有几个一般性的问题和答案。
@@ -55,6 +56,7 @@ NOTE: API v3 版本不向后兼容之前的 API 版本。新的 API 程序已发
 
 
 
+[[licenses-installation-upgrades-and-reverts]]
 == 许可、安装、升级和恢复
 
 有几个问题和答案涉及许可证、安装、升级和恢复。
@@ -125,6 +127,7 @@ CAUTION: 请勿尝试修改许可证文件。否则，安全密钥将失效，�
 
 
 
+[[storage]]
 == 存储
 
 有几个问题和答案涉及存储。
@@ -216,6 +219,7 @@ Select 虚拟机继承了 vSAN 数据存储的存储策略，并且对 FTT/FTM �
 
 
 
+[[vcenter]]
 == vCenter
 
 有几个问题和答案与 VMware vCenter 有关。
@@ -239,6 +243,7 @@ ONTAP Select Deploy 还必须能够与ONTAP Select节点和集群管理 IP 地�
 
 
 
+[[ha-and-clusters]]
 == HA 和集群
 
 有几个问题和答案涉及 HA 对和集群。
@@ -299,6 +304,7 @@ cluster refresh
 
 
 
+[[mediator-service]]
 == 中介服务
 
 有几个问题和答案涉及调解服务。

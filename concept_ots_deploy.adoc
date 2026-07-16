@@ -18,6 +18,7 @@ ONTAP Select Deploy 是一款用于部署和管理ONTAP Select集群的管理实
 
 
 
+[[core-functionality]]
 == 核心功能
 
 Deploy 管理实用程序执行以下核心功能：
@@ -33,18 +34,21 @@ Deploy 管理实用程序执行以下核心功能：
 
 
 
+[[ways-you-can-access-the-deploy-utility]]
 == 访问部署实用程序的方法
 
 访问 Deploy 管理实用程序时，您有多个选项可用。所有外部接口的功能相同。您应该选择最符合您特定部署目标和要求的访问选项。在所有情况下，您都必须使用管理员帐户和有效密码登录。
 
 
 
+[[web-graphical-user-interface]]
 === Web图形用户界面
 
 您可以通过现代 Web 浏览器访问 Deploy 实用程序。WebUI 提供了直观易用的界面，在大多数情况下，它将是您使用该实用程序时的主要界面。
 
 
 
+[[command-line-interface]]
 === 命令行界面
 
 可通过管理 Shell 访问基于文本的命令行界面。您可以通过以下方式访问 CLI 管理 Shell：
@@ -57,6 +61,7 @@ Deploy 管理实用程序执行以下核心功能：
 
 
 
+[[rest-web-services-api]]
 === REST Web 服务 API
 
 向外部客户端公开的 REST Web 服务 API 为连接到 Deploy 实用程序提供了另一种选择。您可以使用任何支持 REST Web 服务的主流编程语言或工具来访问该 API。常用的选择包括：
@@ -70,6 +75,7 @@ Deploy 管理实用程序执行以下核心功能：
 
 
 
+[[ontap-select-online-documentation-web-page]]
 === ONTAP Select在线文档网页
 
 在 Deploy 实用程序中显示在线文档网页是访问 REST Web 服务 API 的另一种方法。但是，您无需使用编程语言，而是使用浏览器通过页面访问管理 API。提供以下功能：

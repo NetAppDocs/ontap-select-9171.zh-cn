@@ -42,6 +42,7 @@ NOTE: 双节点ONTAP Select集群由一个 HA 对和一个调解器组成。在 
 
 
 
+[[two-node-ha-versus-multi-node-ha]]
 == 双节点 HA 与多节点 HA
 
 与FAS阵列不同，HA 对中的ONTAP Select节点仅通过 IP 网络进行通信。这意味着 IP 网络存在单点故障 (SPOF)，因此，防止网络分区和脑裂情况成为设计的一个重要方面。多节点集群可以承受单节点故障，因为集群仲裁可以由三个或更多幸存节点建立。双节点集群依靠ONTAP Deploy 虚拟机托管的调解器服务来实现相同的结果。
@@ -57,6 +58,7 @@ NOTE: ONTAP Deploy 虚拟机在充当双节点集群的调解器时，将成为�
 
 
 
+[[two-node-ha-versus-two-node-stretched-ha-metrocluster-sds]]
 == 双节点 HA 与双节点延伸 HA (MetroCluster SDS)
 
 可以将双节点主动/主动 HA 集群扩展到更远的距离，并可能将每个节点放置在不同的数据中心。双节点集群和双节点延伸集群（也称为MetroCluster SDS）之间的唯一区别在于节点之间的网络连接距离。
