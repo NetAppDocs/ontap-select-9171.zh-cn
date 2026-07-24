@@ -14,7 +14,7 @@ summary: ONTAP Select是ONTAP的纯软件版本，可作为虚拟机管理程序
 
 
 [role="lead"]
-ONTAP Select是ONTAP的纯软件版本，您可以将其作为虚拟机部署在虚拟机管理程序主机上。它是对主流FAS、 AFF和ASA ONTAP产品套件以及其他纯软件选项（例如Cloud Volumes ONTAP）的补充。
+ONTAP Select 是 ONTAP 的纯软件版本，可以将其部署为虚拟机监控程序主机上的虚拟机。它补充了主流的 AFF 和 FAS ONTAP 产品套件以及其他纯软件选项，如 Cloud Volumes ONTAP。
 
 ONTAP Select可将内部磁盘驱动器（NVMe、SSD 或 HDD）以及外部阵列存储转换为灵活的存储系统，并具备专用ONTAP存储系统提供的诸多优势。您还可以在新服务器或现有服务器基础架构上部署ONTAP SelectONTAP Select易于管理，并利用与基于ONTAP 的解决方案相同的管理软件，这意味着运营开销和培训要求的降低。
 
@@ -31,7 +31,7 @@ SnapMirror软件支持您在混合云的ONTAP存储之间移动数据，以便�
 
 通过软件实施和交付 IT 服务，管理员能够以前所未有的速度和敏捷性快速配置资源。随着现代数据中心转向软件定义基础设施 (SDI) 架构，您可以将最有价值的 IT 资产与底层物理基础设施分离，从而提供灵活性、可扩展性和可编程性。
 
-在商品化的世界中，数据分散在直连存储 (DAS) 的各个孤岛中，数据移动和管理已成为更加复杂的问题。软件定义存储 (SDS) 已成为 SDI 领域的重要组成部分，旨在解决这些问题及其他问题。
+在数据分散于直接连接存储（DAS）孤岛的商品世界中，数据访问和管理已成为更复杂的问题。软件定义存储（SDS）已成为 SDI 领域解决这些及其他问题的重要组成部分。
 
 ONTAP Select是NetApp面向 SDS 市场的解决方案。ONTAPONTAP Select为软件定义数据中心带来了企业级存储管理功能，并将NetApp Data Fabric 架构扩展到物联网 (IoT) 和战术服务器等极端边缘用例。
 
@@ -112,6 +112,7 @@ NOTE: 从ONTAP Select 9.16.1 开始，支持手动更新 ARP，并且 ARP 功能
 +
 不支持对集群 IP 空间进行任何修改，包括添加或删除端口、虚拟 LAN (VLAN) 或链路聚合组。
 
+* 异步 SnapMirror 中的一致性组
 * 光纤通道
 +
 不支持光纤通道和以太网光纤通道。
@@ -135,7 +136,7 @@ NOTE: 从ONTAP Select 9.16.1 开始，支持手动更新 ARP，并且 ARP 功能
 不支持修改ONTAP端口的属性，包括速度、双工和流量控制。
 
 * 服务处理器
-* SVM 迁移
+* SVM-Migrate
 * SnapLock Compliance
 * SnapMirror主动同步
 * VMware HCX
