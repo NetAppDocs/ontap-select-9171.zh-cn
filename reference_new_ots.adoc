@@ -66,8 +66,8 @@ link:task_cluster_expansion_contraction.html["了解集群扩展和收缩以及�
 link:task_cluster_expansion_contraction.html["了解集群扩展和收缩以及支持的 KVM 和 ESXi 虚拟机管理程序版本"]。
 
 --
-支持SnapMirror云:: 从 ONTAP Select 9.17.1 开始，ONTAP Select 支持 SnapMirror 云。默认情况下，ONTAP Select 未获得 SnapMirror 云许可证。部署 ONTAP Select 9.17.1 集群或将现有 ONTAP Select 集群升级到版本 9.17.1 时，需要请求 SnapMirror 云许可证。有关详细信息，请参阅 link:reference_lic_ontap_features.html#other-ontap-features["需要单独许可的ONTAP功能"]。
-对 SnapLock Select 的支持:: 从 ONTAP Select 9.17.1 开始，新部署具有自动许可的 SnapLock Select（包括防篡改快照锁定）。对于从 ONTAP Select 9.16.1 及更早版本升级，您可以从 link:https://mysupport.netapp.com/site/["NetApp 支持站点"^] 免费下载 SnapLock Select 许可证并手动应用。如需更多信息，请参阅 link:reference_lic_ontap_features.html#enabled-ontap-features["默认情况下自动启用ONTAP功能"]。
+支持SnapMirror云:: 从 ONTAP Select 9.17.1 开始，ONTAP Select 支持 SnapMirror 云。默认情况下，ONTAP Select 未获得 SnapMirror 云许可证。部署 ONTAP Select 9.17.1 集群或将现有 ONTAP Select 集群升级到版本 9.17.1 时，需要请求 SnapMirror 云许可证。有关详细信息，请参阅 link:reference_lic_ontap_features.html#ontap-features-that-are-separately-licensed["需要单独许可的ONTAP功能"]。
+对 SnapLock Select 的支持:: 从 ONTAP Select 9.17.1 开始，新部署具有自动许可的 SnapLock Select（包括防篡改快照锁定）。对于从 ONTAP Select 9.16.1 及更早版本升级，您可以从 link:https://mysupport.netapp.com/site/["NetApp 支持站点"^] 免费下载 SnapLock Select 许可证并手动应用。有关详细信息，请参阅 link:reference_lic_ontap_features.html#ontap-features-automatically-enabled-by-default["默认情况下自动启用ONTAP功能"]。
 在多节点集群上支持 vSAN ESA:: 从ONTAP Select 9.17.1 开始，对 vSAN Express 存储架构 (ESA) 的支持得到扩展，以部署多节点集群。此增强功能使您能够部署 vSAN ESA 配置。
 +
 --
